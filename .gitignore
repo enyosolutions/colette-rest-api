@@ -1,0 +1,9 @@
+/composer.lock
+/resources/cache/*
+!/resources/cache/.gitkeep
+/resources/logs/*
+!/resources/logs/.gitkeep
+/vendor/*
+/web/assets/*
+/.idea/*
+/resources/config/config.php
