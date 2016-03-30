@@ -2,6 +2,7 @@
 /resources/cache/*
 !/resources/cache/.gitkeep
 /resources/logs/*
+/resources/logs/app.log
 !/resources/logs/.gitkeep
 /vendor/*
 /web/assets/*
