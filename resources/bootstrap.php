@@ -4,8 +4,6 @@
  */
 
 use Binfo\Silex\MobileDetectServiceProvider;
-use Gigablah\Silex\OAuth\OAuthServiceProvider;
-use Neutron\Silex\Provider\MongoDBODMServiceProvider;
 use Silex\Provider\HttpCacheServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
@@ -22,7 +20,7 @@ $app->register(new HttpCacheServiceProvider());
 $app->register(new Silex\Provider\HttpFragmentServiceProvider());
 //$app->register(new Silex\Provider\SecurityServiceProvider());
 //$app->register(new Silex\Provider\RememberMeServiceProvider());
-$app->register(new SessionServiceProvider(),array('session.storage.options' => array('cookie_lifetime' => 1209600)));
+$app->register(new SessionServiceProvider(), array('session.storage.options' => array('cookie_lifetime' => 1209600)));
 $app->register(new ValidatorServiceProvider());
 //$app->register(new FormServiceProvider());
 $app->register(new MobileDetectServiceProvider());
@@ -43,7 +41,6 @@ $app['sendgrid.mailer'] = $app->share(function ($app) {
 });
 
 
-
 // ...
 
 //
@@ -52,16 +49,15 @@ $app['sendgrid.mailer'] = $app->share(function ($app) {
 
 
 $app->register(new TranslationServiceProvider(), array(
-    'locale_fallbacks' => array('en')));
+    'locale_fallbacks' => array('fr')));
 $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
     $translator->addLoader('yaml', new YamlFileLoader());
     $translator->addResource('yaml', __DIR__ . '/locales/fr.yml', 'fr');
-    $translator->addResource('yaml', __DIR__ . '/locales/en.yml', 'en');
 
     return $translator;
 }));
 
-if( $app['session']->has('locale')){
+if ($app['session']->has('locale')) {
     $app['locale'] = $app['session']->get('locale');
 }
 //Injecting default locale
@@ -71,28 +67,27 @@ $app['translator']->setLocale($app['locale']);
 // I18N aka LOCALIZATION
 
 
-
 $app->before(function () use ($app) {
     //LOCALE
-    if (!in_array($app['locale'], array('en', 'fr')) || strlen($app['locale']) <> 2) {
+    if (!in_array($app['locale'], $app["supported_locales"]) || strlen($app['locale']) <> 2) {
         $loc = '';
         try {
             if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
                 $loc = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-                $loc = isset($loc) ? substr($loc, 0, 2) : 'en';
-                if (!in_array($loc, array('en', 'fr'))) {
-                    $loc = 'en';
+                $loc = isset($loc) ? substr($loc, 0, 2) : 'fr';
+                if (!in_array($loc, $app["supported_locales"])) {
+                    $loc = 'fr';
                 }
             }
         } catch (Exception $e) {
-            $loc = 'en';
+            $loc = 'fr';
         }
 
         $url = str_replace($app['locale'], $loc, $app['request']->getRequestUri());
         return $app->redirect($url);
     }
 
-    if ('en' !== $app['locale']) {
+    if ('fr' !== $app['locale']) {
         $loc = $app['locale'] . '_' . strtoupper($app['locale']) . '.UTF-8';
         setlocale(LC_ALL, $loc);
         setlocale(LC_TIME, $loc);
@@ -116,7 +111,7 @@ $app->after(function (\Symfony\Component\HttpFoundation\Request $request, \Symfo
 
     $url = $_SERVER['REQUEST_URI'];
 
-    if ( preg_match("/\/api/i", $url) === 1) {
+    if (preg_match("/\/api/i", $url) === 1) {
         $response->headers->set('Access-Control-Allow-Origin', '*');
         $response->headers->set('Access-Control-Allow-Credentials', false);
         $response->headers->set('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
@@ -137,7 +132,7 @@ $app->register(new TwigServiceProvider(), array(
 $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     $twig->addExtension(new Teraone\Twig\Extension\StrftimeExtension());
     $twig->addExtension(new \App\Services\AutoAB\AB());
-    $twig->addFilter(new Twig_SimpleFilter("slugify",'slugify'));
+    $twig->addFilter(new Twig_SimpleFilter("slugify", 'slugify'));
     return $twig;
 }));
 
@@ -159,15 +154,13 @@ $app['monolog.factory'] = $app->protect(function ($name) use ($app) {
 });
 
 
-
-$app['notifyService'] = $app->share(function() use ($app) {
+$app['notifyService'] = $app->share(function () use ($app) {
     $dispatcher = new Symfony\Component\EventDispatcher\EventDispatcher();
     //$dispatcher->addListener('notify.success', $callable1);
     // $dispatcher->addListener('notify.unable_to_start', $callable2);
 
     return $dispatcher;
 });
-
 
 
 if ($app['debug'] && $app['whoops']) {
@@ -178,7 +171,6 @@ if ($app['debug'] && $app['whoops']) {
 }
 
 
-
 if ((isset($app['app.test']) && $app['app.test']) || ($app['debug'] && $app['profiler'] && isset($app['cache.path']))) {
     $app->register(new WebProfilerServiceProvider(), array(
         'profiler.cache_dir' => $app['cache.path'] . '/profiler',
@@ -187,13 +179,12 @@ if ((isset($app['app.test']) && $app['app.test']) || ($app['debug'] && $app['pro
 }
 
 
-
 //@todo This should be in the bootstrap ...
 try {
-    $conn = new MongoClient("mongodb://".$app['mongodb.options']['user'].":"
-        .$app['mongodb.options']['password']."@"
-        .$app['mongodb.options']['host']
-        ."/".$app['mongodb.options']['dbname']);
+    $conn = new MongoClient("mongodb://" . $app['mongodb.options']['user'] . ":"
+        . $app['mongodb.options']['password'] . "@"
+        . $app['mongodb.options']['host']
+        . "/" . $app['mongodb.options']['dbname']);
     $db = $conn->selectDB($app['mongodb.options']['dbname']);
     $app['mongodb'] = $db;
 } catch (MongoConnectionException $e) {
