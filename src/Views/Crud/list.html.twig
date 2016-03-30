@@ -5,9 +5,6 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="/css/bg.css?v={{ app['assets.css.version'] }}">
-    <link rel="stylesheet" href="/css/AdminLTE.css?v={{ app['assets.css.version'] }}">
-
 {% endblock %}
 
 
@@ -68,7 +65,7 @@
             <tr>
                 <th>Code</th>
                 <th>Name</th>
-                <th>Tags</th>
+                <th>Description</th>
                 <th>Actions</th>
             </tr>
             {% for element in collection %}
@@ -78,12 +75,13 @@
                     <td>
                         <ul class="list-group">
                         {% for key, val in element %}
-                            <li class="list-group-item">{{ key }} : {{ val }}</li>
+                            <li class="list-group-item">{{ key }} : {{ val |join('.') }}</li>
                         {% endfor %}
                             </ul>
                 </td>
-                    <td><a class="btn btn-primary" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: element._id }) }}">Edit</a>
-                    <a class="btn btn-primary bg-yellow"  href="{{ path('admin_crud_view', {'collectionName': collectionName, id: element._id }) }}">Show</a></td>
+                    <td><a class="btn btn-primary" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: element._id }) }}">Edit</a> |
+                    <a class="btn btn-primary bg-yellow"  href="{{ path('admin_crud_view', {'collectionName': collectionName, id: element._id }) }}">Show</a> |
+                    <a class="btn btn-danger bg-yellow" onclick="return confirm('{{ 'confirm.action.label'| trans }}')"  href="{{ path('admin_crud_delete', {'collectionName': collectionName, id: element._id }) }}">Delete</a></td>
                 </tr>
             {% endfor %}
         </table>

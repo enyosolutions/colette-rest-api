@@ -26,9 +26,11 @@ $app->match('/{_locale}/parts/footer', "home.controller:getFooterAction");
 // Admin
 $app->get('/admin/crud/{collectionName}/list', "admin.crud.controller:listAction")->bind("admin_crud_list");
 $app->get('/admin/crud/list', "admin.crud.controller:dispatchAction")->bind("crud_list_default");
+
 $app->match('/admin/crud/{collectionName}/add', "admin.crud.controller:addAction")->bind("admin_crud_add");
-$app->match('/admin/crud/{collectionName}/{id}/view', "admin.crud.controller:viewAction")->bind("admin_crud_view");
+$app->get('/admin/crud/{collectionName}/{id}/view', "admin.crud.controller:viewAction")->bind("admin_crud_view");
 $app->match('/admin/crud/{collectionName}/{id}/edit', "admin.crud.controller:editAction")->bind("admin_crud_edit");
+$app->match('/admin/crud/{collectionName}/{id}/delete', "admin.crud.controller:deleteAction")->bind("admin_crud_delete");
 
 
 
@@ -45,6 +47,8 @@ $app->options('/api/{collectionName}', function () {
     return new \Symfony\Component\HttpFoundation\Response(null);
 });
 $app->get('/api/{collectionName}', "api.crud.controller:listAction")->bind('api.crud.list');
+
+$app->get('/api/{collectionName}/{id}', "api.crud.controller:listAction")->bind('api.crud.view');
 
 $app->post('/api/{collectionName}', "api.crud.controller:createAction")->bind('api.crud.create');
 

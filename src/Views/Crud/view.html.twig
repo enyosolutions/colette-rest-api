@@ -1,13 +1,10 @@
-{% extends 'Admin/admin.layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% set active = 'homepage' %}
 
 
 
 {% block stylesheets %}
     {{ parent() }}
-        <link rel="stylesheet" href="/css/bg.css?v={{ app['assets.css.version'] }}">
-        <link rel="stylesheet" href="/css/AdminLTE.css?v={{ app['assets.css.version'] }}">
-    <link rel="stylesheet" href="/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 {% endblock %}
 
 
@@ -23,8 +20,16 @@
                 <a class="btn btn-app" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: singleItem._id }) }}"><i class="fa fa-save"></i>Modify</a>
             </div>
             <div class="box-body">
-                {% import 'Admin/json.schema.view.macro.html.twig' as macro %}
+                {% if not schema is null %}
+                {% import 'json.schema.view.macro.html.twig' as macro %}
                 {{ macro.json_form(schema.properties, schema.required, singleItem,'_'~collectionName, 5) }}
+                {% else %}
+                    <ul class="list-group">
+                        {% for key, val in element %}
+                            <li class="list-group-item">{{ key }} : {{ val |join('.') }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
 
             <!-- /.box-body -->

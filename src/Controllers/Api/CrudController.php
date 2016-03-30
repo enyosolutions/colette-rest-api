@@ -36,7 +36,7 @@ class CrudController extends \App\Controllers\DefaultController
 
 
         //array containing a search query, complete with filters.
-        $data = $this->request->query->all();
+        $data = $this->request->request->all();
 
 
         $elementSkeleton = $this->app["jsonschema.validator"]->generate('/'.ucfirst($collectionName));
@@ -69,7 +69,7 @@ class CrudController extends \App\Controllers\DefaultController
 
         //array containing a search query, complete with filters.
         $skeleton = $this->app["jsonschema.validator"]->generate('/'.ucfirst($collectionName));
-        $data = $this->request->query->all();
+        $data = $this->request->request->all();
         $data = array_merge_recursive_ex($skeleton, $data);
         $object = array_merge_recursive_ex($object, $data);
 

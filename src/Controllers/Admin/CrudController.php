@@ -8,9 +8,8 @@
 
 namespace App\Controllers\Admin;
 
-use JasonGrimes\Paginator;
 use App\Controllers\DefaultController;
-use Resty\Resty;
+use JasonGrimes\Paginator;
 
 /**
  * Description of CrudController
@@ -18,13 +17,15 @@ use Resty\Resty;
  *
  * @author polo
  */
-class CrudController extends DefaultController {
+class CrudController extends DefaultController
+{
 
-    public function listAction($collectionName) {
-        $order_by = $this->request->get('order_by') ? : 'name';
+    public function listAction($collectionName)
+    {
+        $order_by = $this->request->get('order_by') ?: 'name';
         $order_dir = $this->request->get('order_dir') == 'DESC' ? 'DESC' : 'ASC';
-        $limit = (int) ($this->request->get('limit') ? : 70);
-        $page = (int) ($this->request->get('page') ? : 1);
+        $limit = (int)($this->request->get('limit') ?: 70);
+        $page = (int)($this->request->get('page') ?: 1);
         $offset = ($page - 1) * $limit;
         $object_list = null;
         $q = null; //requête faire la recherche
@@ -38,7 +39,7 @@ class CrudController extends DefaultController {
                     ['intl.en.name' => new \MongoRegex("/^" . $q . "/i")],
                     ['intl.fr.name' => new \MongoRegex("/^" . $q . "/i")]
                 ]
-                    ]
+                ]
             );
         } else {
             $object_list = $this->app["mongodb"]->{$collectionName}->find();
@@ -48,45 +49,50 @@ class CrudController extends DefaultController {
         $object_list->sort(array('name' => 1));
         $numResults = $object_list->count();
 
-        $paginator = new Paginator($numResults, $limit, $page, $this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName] ) . '?page=(:num)&limit=' . $limit . '&order_by=' . $order_by . '&order_dir=' . $order_dir
+        $paginator = new Paginator($numResults, $limit, $page, $this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]) . '?page=(:num)&limit=' . $limit . '&order_by=' . $order_by . '&order_dir=' . $order_dir
         );
 
         $collectionSelect = $this->app['mongodb']->listCollections();
 
+        foreach($collectionSelect as $key => $name){
+            $collectionSelect[$key] = str_replace($this->app['mongodb.options']['dbname'].".", "", $name);
+        }
+
         $this->twig->disableStrictVariables();
         return $this->twig->render('Crud/list.html.twig', array(
-                    'collection' => $object_list,
-                    'collectionName' => $collectionName,
-                    'q' => $q,
+            'collection' => $object_list,
+            'collectionName' => $collectionName,
+            'q' => $q,
             'collectionSelect' => $collectionSelect,
-                    'paginator' => $paginator,
+            'paginator' => $paginator,
         ));
     }
 
-    public function editAction($id, $collectionName) {
-        $singleItem= null;
+    public function editAction($id, $collectionName)
+    {
+        $singleItem = null;
         if ($id !== 'new') {
             $singleItem = $this->app["mongodb"]->{$collectionName}->find(array('_id' => new \MongoId($id)))->getNext();
             if (is_null($singleItem)) {
-                $this->session->getFlashBag()->add('error', 'Unkown region Id ' . $id);
+                $this->session->getFlashBag()->add('error', 'Unkown '.$collectionName.' Id ' . $id);
                 return $this->app->redirect("/");
             }
         }
         if ($this->request->isMethod('POST')) {
-            $data = $this->request->request->get('_'.$collectionName);
+            $data = $this->request->request->get('_' . $collectionName);
 
             $data['code'] = slugify($data['code']);
 
             /**
              * unserialize comma separated values
              */
-            if(isset($data['tags'])){
+            if (isset($data['tags'])) {
                 $data['tags'] = is_string($data['tags']) ? explode(",", $data['tags']) : $data['tags'];
             }
-            if(isset($data['countries'])){
+            if (isset($data['countries'])) {
                 $data['countries'] = is_array($data['countries']) ? $data['countries'] : explode(",", $data['countries']);
             }
-            if(isset($data['enabled'])){
+            if (isset($data['enabled'])) {
                 $data['enabled'] = isset($data['enabled']) ? true : false;
             }
 
@@ -98,9 +104,9 @@ class CrudController extends DefaultController {
 
             $singleItem['code'] = strtoupper($singleItem['code']);
 
-            $singleItem = $this->app["jsonschema.validator"]->cast($singleItem, '/'.ucfirst($collectionName));
+            $singleItem = $this->app["jsonschema.validator"]->cast($singleItem, '/' . ucfirst($collectionName));
 
-            if ($this->app["jsonschema.validator"]->validate($singleItem, '/'.ucfirst($collectionName))) {
+            if ($this->app["jsonschema.validator"]->validate($singleItem, '/' . ucfirst($collectionName))) {
 
                 if (isset($singleItem['_id'])) {
                     $this->app["mongodb"]->{$collectionName}->update(array('_id' => $singleItem['_id']), $singleItem);
@@ -110,63 +116,82 @@ class CrudController extends DefaultController {
                     $this->session->getFlashBag()->add('success', 'The collection has been modified');
                 }
                 $this->session->getFlashBag()->add('success', 'The collection has been modified');
-                return $this->app->redirect($this->app['url_generator']->generate('admin_crud_view', ['collectionName'=>$collectionName, 'id' => $singleItem['_id']]));
+                return $this->app->redirect($this->app['url_generator']->generate('admin_crud_view', ['collectionName' => $collectionName, 'id' => $singleItem['_id']]));
             } else {
                 foreach ($this->app["jsonschema.validator"]->getErrors() as $error) {
                     $this->session->getFlashBag()->add('error', sprintf("[%s] %s\n", $error['property'], $error['message']));
                 }
             }
         }
-        $schema = $this->app["jsonschema.store"]['/'.ucfirst($collectionName)];
+        $schema = $this->app["jsonschema.store"]['/' . ucfirst($collectionName)];
         $schema = json_decode(json_encode($schema), true);
         if ($singleItem !== NULL) {
             $singleItem['countries'] = (isset($singleItem['countries']) ? implode(",", $singleItem['countries']) : []);
             $singleItem['tags'] = (isset($singleItem['tags']) ? implode(",", $singleItem['tags']) : []);
         }
         return $this->app['twig']->render('Crud/edit.html.twig', array(
-                    'collectionName' => $collectionName,
-                    'singleItem' => $singleItem,
-                    'schema' => $schema
+            'collectionName' => $collectionName,
+            'singleItem' => $singleItem,
+            'schema' => $schema
         ));
     }
 
-    public function viewAction($id, $collectionName) {
+    public function viewAction($id, $collectionName)
+    {
         $singleItem = $this->app["mongodb"]->{$collectionName}->find(array('_id' => new \MongoId($id)))->getNext();
         if (is_null($singleItem)) {
             $this->session->getFlashBag()->add('error', 'unkown Id ' . $id);
             return $this->app->redirect("/");
         }
+        $schema = null;
+        if (isset($this->app["jsonschema.store"]['/' . ucfirst($collectionName)])) {
+            $schema = $this->app["jsonschema.store"]['/' . ucfirst($collectionName)];
+            $schema = json_decode(json_encode($schema), true);
+        }
+        if (isset($object['tags'])) {
+            if (is_array($object['tags'])) {
+                $object['tags'] =  implode(",", $object['tags']);
+            }
+        }
 
-        $schema = $this->app["jsonschema.store"]['/Region'];
-        $schema = json_decode(json_encode($schema), true);
-        $object['tags'] = (isset($object['tags']) ? implode(",", $object['tags']) : []);
         return $this->app['twig']->render('Crud/view.html.twig', array(
-                    'singleItem' => $singleItem,
-                    'collectionName' => $collectionName,
-                    'schema' => $schema
+            'singleItem' => $singleItem,
+            'collectionName' => $collectionName,
+            'schema' => $schema
         ));
     }
 
-    public function addAction($collectionName) {
+    public function addAction($collectionName)
+    {
         if ($this->request->isMethod('POST')) {
-            $singleItem = $this->request->get('_'.$collectionName);
+            $singleItem = $this->request->get('_' . $collectionName);
             $singleItem['countries'] = explode(",", $singleItem['countries']);
             $this->app["mongodb"]->{$collectionName}->insert($singleItem);
             return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list'));
         } else {
-            $schema = $this->app["jsonschema.store"]['/'.$collectionName];
+            $schema = $this->app["jsonschema.store"]['/' . ucfirst($collectionName)];
             $schema = json_decode(json_encode($schema), true);
-            return $this->app['twig']->render('Crud/add.html.twig', array(
-                        'schema' => $schema
+            return $this->app['twig']->render('Crud/edit.html.twig', array(
+                'collectionName' => $collectionName,
+                'schema' => $schema
             ));
         }
     }
 
-    public function dispatchAction() {
+    public function deleteAction($id, $collectionName)
+    {
+        $this->app["mongodb"]->{$collectionName}->remove(array('_id' => new \MongoId($id)));
+        $this->session->getFlashbag()->add('success', "crud.messages.item.deleted.label");
+        return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]));
+    }
+
+
+    public function dispatchAction()
+    {
         if ($this->request->query->has('collectionName')) {
             $collectionName = $this->request->query->get('collectionName');
             return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', array('collectionName' => $collectionName)));
-        } else{
+        } else {
             return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', array('collectionName' => 'user')));
         }
     }
