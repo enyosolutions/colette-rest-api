@@ -11,6 +11,7 @@
  */
 //$app->match('/',"home.controller:indexAction")->bind("homepage");
 
+$app->match('/{_locale}', "home.controller:indexAction")->assert("_locale", "[a-z]{2}")->bind("home");
 $app->match('/', "home.controller:indexAction")->assert("_locale", "[a-z]{2}")->bind("homepage");
 $app->match('/contact', "home.controller:contactAction")->assert("_locale", "[a-z]{2}")->bind("contact");
 //$app->match('/', "home.controller:maintenanceAction")->bind("home");
