@@ -74,8 +74,14 @@
             {% for element in collection %}
                 <tr>
                     <td>{{ element._id }}</td>
-                    <td>{{ element.name or element.title or element.firstname }}</td>
-                    <td>{{ element.tags | join (', ') }}</td>
+                    <td>{{ element.name }} | {{ element.title }} | {{ element.firstname }}</td>
+                    <td>
+                        <ul class="list-group">
+                        {% for key, val in element %}
+                            <li class="list-group-item">{{ key }} : {{ val }}</li>
+                        {% endfor %}
+                            </ul>
+                </td>
                     <td><a class="btn btn-primary" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: element._id }) }}">Edit</a>
                     <a class="btn btn-primary bg-yellow"  href="{{ path('admin_crud_view', {'collectionName': collectionName, id: element._id }) }}">Show</a></td>
                 </tr>
