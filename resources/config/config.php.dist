@@ -1,0 +1,143 @@
+<?php
+define("DOCUMENT_ROOT", __DIR__."/../..");
+define("WEB_ROOT", __DIR__."/../../web");
+
+
+//MYSQL CONNECTION STRING  -- not used in this project
+$app['db.options'] = array(
+    'driver'   => 'pdo_mysql',
+    'host'     => 'localhost',
+    'dbname'   => 'fly_dev',
+    'user'     => 'root',
+    'password' => 'toor',
+);
+
+//MONGO CONNECTION STRING
+$app['mongodb.options'] = array(
+    'host'     => '10.0.0.60',
+    'dbname'   => 'flyProd',
+    'user'     => 'flydb',
+    'password' => '?',
+    'port'     => 27017
+);
+
+
+//MONGO ODM CONNECTION STRING
+$app['doctrine.odm.mongodb.connection_options'] = array(
+    'database' => $app['mongodb.options']['dbname'],
+
+    // connection string:
+    // mongodb://[username:password@]host1[:port1][,host2[:port2:],...]/db
+    'host'     => 'mongodb://' . $app['mongodb.options']['user'] . ':' .$app['mongodb.options']['password'] . '@'.
+        $app['mongodb.options']['host'] .':' . $app['mongodb.options']['port'] .'/' . $app['mongodb.options']['dbname'],
+
+    // connection options as described here:
+    // http://www.php.net/manual/en/mongoclient.construct.php
+    'options'  => array('fsync' => false),
+    'doctrine.odm.mongodb.documents'               => array(
+        0 => array(
+            'type' => 'annotation',
+            'path' => array(
+                'src/Models/Entities',
+            ),
+            'namespace' => 'App\Models\Entities',
+            'alias'     => 'docs',
+        ),
+
+    ),
+    'doctrine.odm.mongodb.proxies_dir'             => 'cache/doctrine/odm/mongodb/Proxy',
+    'doctrine.odm.mongodb.proxies_namespace'       => 'DoctrineMongoDBProxies',
+    'doctrine.odm.mongodb.auto_generate_proxies'   => true,
+    'doctrine.odm.mongodb.hydrators_dir'           => 'cache/doctrine/odm/mongodb/Hydrator',
+    'doctrine.odm.mongodb.hydrators_namespace'     => 'DoctrineMongoDBHydrator',
+    'doctrine.odm.mongodb.auto_generate_hydrators' => true,
+    'doctrine.odm.mongodb.metadata_cache'          => new \Doctrine\Common\Cache\ArrayCache(),
+    'doctrine.odm.mongodb.logger_callable'         => $app->protect(function($query) {
+
+        // log your query
+    })
+
+);
+
+
+//REDIS CONNECTION STRING
+$app['redis.options'] = [
+    'predis.parameters' => [
+
+        'scheme'   => 'tcp',
+        'host'     => '10.0.0.50',
+        'port'     => 6379,
+        'database' => 10,
+        'password' => '0vvEFAwXt1crHBg10vbatrYVc0d30'
+    ],
+    'predis.options'    => [
+        'prefix'  => 'kwg:',
+        'profile' => '3.0'
+    ],
+];
+
+
+$app['kwg.api.host'] = 'http://10.0.0.50:1985/REST';
+
+$app['backend.url'] = 'http://adm1n.kenweego.com';
+$app['frontend.url'] = 'http://www.kenweego.com';
+$app['frontend.local_url'] =  __DIR__.'/../..';
+
+
+
+// I18N aka LOCALIZATION
+$loc = '';
+try {
+    if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])){
+        $loc = Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $loc = isset($loc)?substr($loc,0,2):'fr';
+    }
+}
+catch(Exception $e) {
+    $loc = 'fr';
+}
+/**THE APP SUPPORTED LOCALES */
+$app["supported_locales"] =  ['en', 'fr', 'es', 'de'];
+
+
+//User class
+require __DIR__ . '/simple_user_options.php';
+
+// Cache
+$app['cache.path'] = __DIR__ . '/../cache';
+$app['assets.js.version'] = intval(file_get_contents( __DIR__ . '/../../web/js.version.txt'));
+$app['assets.css.version'] = intval(file_get_contents( __DIR__ . '/../../web/css.version.txt'));
+$app['version'] = file_get_contents( __DIR__ . '/../../web/VERSION.MD');
+
+// Http cache
+$app['http_cache.cache_dir'] = $app['cache.path'] . '/http';
+
+// Twig cache
+$app['twig.options.cache'] = $app['cache.path'] . '/twig';
+
+//mailer
+$app['swiftmailer.use_spool'] = false;
+
+// User
+$app['security.users'] = array('username' => array('ROLE_USER', 'password'));
+
+//JSON VALIDATION OPTIONS
+$app["jsonschema.options"] = ['schemas_directory' => DOCUMENT_ROOT . '/lib/kwg/Models/Schemas',
+    'base_namespace' => '/'];
+
+
+// Analytics IDs
+\Segment::init("YOUR_WRITE_KEY");
+
+
+try {
+    $conn = new MongoClient("mongodb://".$app['mongodb.options']['user'].":"
+        .$app['mongodb.options']['password']."@"
+        .$app['mongodb.options']['host']
+        ."/".$app['mongodb.options']['dbname']);
+    $db = $conn->selectDB($app['mongodb.options']['dbname']);
+    $app['mongodb'] = $db;
+} catch (MongoConnectionException $e) {
+    die($e->getMessage()); // TODO:: In production you might want to turn this off.
+
+}

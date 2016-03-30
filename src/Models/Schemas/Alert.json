@@ -1,0 +1,88 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/",
+    "type": "object",
+    "properties": {
+        "type": {
+            "id": "type",
+            "type": "string"
+        },
+        "user": {
+            "id": "user",
+            "type": "object",
+            "properties": {
+                "email": {
+                    "id": "email",
+                    "type": "string"
+                },
+                "lang": {
+                    "id": "lang",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "email"
+            ],
+            "additionalProperties": true
+        },
+        "query": {
+            "id": "query",
+            "type": "object",
+            "properties": {
+                "origin": {
+                    "id": "origin",
+                    "type": "string"
+                },
+                "destinations": {
+                    "id": "destinations",
+                    "type": "array",
+                    "properties": {}
+                },
+                "startDate": {
+                    "id": "startDate",
+                    "type": "string",
+                    "pattern": "^2[0-9]{3}-[0-9]{2}-[0-9]{2}$"
+                },
+                "endDate": {
+                    "id": "endDate",
+                    "type": "string",
+                    "pattern": "^2[0-9]{3}-[0-9]{2}-[0-9]{2}$"
+
+                },
+                "singletrip": {
+                    "id": "singletrip",
+                    "type": "boolean"
+                },
+                "price": {
+                    "id": "price",
+                    "type": "number"
+                }
+            },
+            "required":[
+                "origin",
+                "startDate",
+                "singletrip"
+            ],
+            "additionalProperties": false
+        },
+        "enabled": {
+            "id": "enabled",
+            "type": "boolean"
+        },
+        "createdAt": {
+            "id": "createdAt",
+            "type": "number"
+        },
+        "validUntil": {
+            "id": "validUntil",
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "type",
+        "user",
+        "query",
+        "enabled"
+    ]
+}

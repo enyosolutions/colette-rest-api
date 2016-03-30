@@ -1,0 +1,106 @@
+{% extends 'Admin/admin.layout.html.twig' %}
+{% set active = 'homepage' %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/bg.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div>
+
+        <h2>Editing : {{ singleItem.name }}</h2>
+        <form role="form" action="" method="post" class="box box-success">
+            <div class="btn-group" style="">
+                <a href="{{ path('admin_crud_list', {'collectionName': collectionName} ) }}" class="btn btn-app" type="button"><i class="fa fa-reply"></i>Back</a>
+                <button class="btn btn-app" type="submit"><i class="fa fa-save"></i>{{ region ? 'Modify' : 'Create' }}
+                </button>
+
+            </div>
+            <div class="box-body">
+                {% import 'Admin/json.schema.form.macro.html.twig' as macro %}
+                {{ macro.json_form(schema.properties, schema.required, singleItem,'_'~collectionName, 7) }}
+            </div>
+
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+
+        <div id="editor_holder">
+
+        </div>
+
+    </div>
+
+
+{% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src='/js/libs/wikipedia.js'></script>
+        <script type="text/javascript">
+            var countries, countrynames;
+
+            $(function () {
+                $(".tags, .sights").tagsinput({
+                            tagClass: randomTagColor
+                        }
+                );
+
+            });
+
+            function switchToTextarea(elm) {
+                var textbox = $(elm);
+                var textarea = $("<textarea></textarea>");
+                textarea.val(textbox.val());
+                textarea.attr('name', textbox.attr('name'));
+                textarea.attr('id', textbox.attr('id'));
+                textarea.attr('class', textbox.attr('class'));
+                textarea.attr('cols', "95");
+                textarea.attr('rows', "10");
+                textarea.attr('id', textbox.attr('id'));
+                //Replace textbox with textarea
+                textbox = textbox.replaceWith(textarea);
+                return textarea;
+            }
+
+
+            function randomTagColor(item) {
+
+                var rand = Math.round(Math.random() * 10);
+                switch (rand) {
+                    case 1   :
+                        return 'label label-lime';
+                    case 2  :
+                        return 'label label-danger label-important';
+                    case 3:
+                        return 'label label-success';
+                    case 4   :
+                        return 'label label-default';
+                    case 5     :
+                        return 'label label-info';
+                    default:
+                    case 6     :
+                        return 'label label-material-teal';
+                    case 7     :
+                        return 'label label-material-purple';
+                    case 8     :
+                        return 'label label-material-yellow';
+                    case 9     :
+                        return 'label label-material-brown';
+                    case 10     :
+                        return 'label label-material-amber';
+                }
+            }
+
+        </script>
+    {% endblock %}

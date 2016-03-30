@@ -1,0 +1,99 @@
+{% extends 'Layout/layout-v2.html.twig' %}
+{% block topnav %}
+    {% embed 'common/navTop-v2.html.twig' %}
+        {% block subheader %}
+            <div class="container-fluid">
+
+            </div>
+        {% endblock subheader %}
+    {% endembed %}
+{% endblock topnav %}
+{% set active = 'inspireme' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/search/city-infos.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/inspireme/inspireme.css">
+{% endblock %}
+{% block content %}
+    {% set img = ((not q is empty) ? ("/data/city/" ~ cities[0].code ~ "/pictures/" ~ (app["mobile_detect"].isMobile()? 'main' : '1920') ~ ".jpg"): '/img/landing/5.jpg') %}
+    <section class="hero small-hero" style="background-image:url({{ img }});">
+        <div class="bg-overlay">
+            <div class="container" style="">
+                <div class="intro-wrap">
+                    <h1 class="intro-title">{{ 'inspireme.page.title' | trans }}</h1>
+
+                    <div class="intro-text">
+                        <div class="taxonomy-description">
+                            <p>{{ 'quotes.travel.%id%' | replace({'%id%':random(1..5)})  | trans }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="main">
+        <div class="container-fluid">
+            <div class="col-sm-12 home-search-field">
+                <form class="big-search" role="search" method="get"
+                      action="{{ path('destinations.list') }}" _lpchecked="1">
+                    <input type="text"
+                           name="q"
+                           placeholder="{{ 'big.search.placeholder.text' | trans }}"
+                           value="{{ q }}">
+                    <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
+            </div>
+
+            <hr/>
+
+            <h3 class="{% if q is empty %} hidden {% endif %}">{{ 'Places'| trans }}</h3>
+
+            <div class="places" id="inspireMe">
+
+                <div class="row">
+                    {% for city in cities %}
+                        <div class="col-sm-4">
+                            <article class="place-box card">
+                                <a href="{{ path('destination.city',{city:city.code ~ '_' ~ (city.intl[app.locale].name | slugify)} ) }}"
+                                   class="place-link"
+                                   title="{{ city.intl[app.locale].name }}">
+                                    <header>
+                                        <h3 class="entry-title"><i
+                                                    class="fa fa-map-marker"></i>{{ city.intl[app.locale].name }}
+                                            , {{ city.intl[app.locale].country }}</h3></header>
+                                    <div class="entry-thumbnail"><img alt="" title=""
+                                                                      src="{{ city.image }}"></div>
+                                </a>
+                            </article>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+            {{ pagination |raw }}
+        </div>
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                {% for r in regions %}
+                    <a href="{{ path('destinations.list') }}?q={{ r.code }}"
+                       class="btn {{ (loop.index is odd)? 'btn-default': 'btn-info' }}">{{ r.name }}
+                        <div class="ripple-container"></div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %} {{ parent() }}
+
+
+    <script>
+        $(function () {
+
+            if (window.analytics) {
+                analytics.page("InspireMe", {q: '{{ q is defined and q is not empty  ? q : 'undefined'}}' });
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'layout.html.twig' %}
+{% set active = 'admin' %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/bg.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/AdminLTE.css?v={{ app['assets.css.version'] }}">
+
+{% endblock %}
+
+
+{% block content %}
+    <div>
+        <section>
+            <div class="btn-group" style="">
+                <a class="btn btn-app" href="{{ path('admin_crud_list',{'collectionName': collectionName}) }}" type="button"><i
+                        class="fa fa-reply"></i>Back</a>
+
+            </div>
+            <div class="btn-group" style="">
+                <a class="btn btn-app" href="{{ path('admin_crud_add', {'collectionName': collectionName}) }}" type="button"><i
+                        class="fa fa-plus"></i>Create a collectionName</a>
+
+            </div>
+            <div class="btn-group pull-right" style="margin-left: 10px">
+                <form action="{{ path('admin_crud_list', {'collectionName': collectionName}) }}" method="get" class="form-inline"
+                      style="width:220px;">
+                    <div class="form-group">
+                        <input type="text" name="q" value="{{ q }}" class="form-control input-active" placeholder="Search..."/>
+                    </div>
+                    <button type='submit' name='seach' id='search-btn' class="form-control btn btn-default"><i
+                                class="fa fa-search"></i></button>
+                </form>
+            </div>
+            <div class="btn-group pull-right">
+                <form method='GET' action="{{path('crud_list_default')}}" class="form-inline">
+                    <select name="collectionName" class="form-control">
+                        {% for value in collectionSelect %}
+                        <option {% if value == collectionName %} selected {% endif %}>{{ value }}</option>
+                            {% endfor %}
+                    </select>
+                    <input type='submit' class="btn btn-primary" value='Change'>
+                </form>
+            </div>
+        </section>
+
+        <h1>
+            {% if q is not empty %}
+                Results for "{{ q }}"
+            {% else %}
+                Listing {{ collection.count }} {{ collectionName }}
+            {% endif %}
+        </h1>
+
+        {% if paginator.totalItems == 1 %}
+            <strong>1</strong> {{ collectionName }} found.
+        {% else %}
+            <strong>{{ paginator.totalItems }}</strong> regions found.
+        {% endif %}
+
+        Showing <strong>{{ paginator.currentPageFirstItem }} - {{ paginator.currentPageLastItem }}</strong>.
+
+
+        <hr>
+        <table class="table table-bordered">
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Tags</th>
+                <th>Actions</th>
+            </tr>
+            {% for element in collection %}
+                <tr>
+                    <td>{{ element._id }}</td>
+                    <td>{{ element.name or element.title or element.firstname }}</td>
+                    <td>{{ element.tags | join (', ') }}</td>
+                    <td><a class="btn btn-primary" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: element._id }) }}">Edit</a>
+                    <a class="btn btn-primary bg-yellow"  href="{{ path('admin_crud_view', {'collectionName': collectionName, id: element._id }) }}">Show</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {{ paginator|raw }}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

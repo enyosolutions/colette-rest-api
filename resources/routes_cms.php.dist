@@ -1,0 +1,10 @@
+<?php
+$app->get("/fr/a-propos","page.controller:defaultAction")->bind("about_page_fr");
+$app->get("/en/afaz/fafa","page.controller:defaultAction")->bind("sub_tera");
+$app->get("/en/about","page.controller:defaultAction")->bind("about_page_en");
+$app->get("/de/privacy","page.controller:defaultAction")->bind("privacy_policy_de");
+$app->get("/de/about","page.controller:defaultAction")->bind("about_page_de");
+$app->get("/es/sobre-nos","page.controller:defaultAction")->bind("about_page_es");
+$app->get("/es/privacidad","page.controller:defaultAction")->bind("privacy_policy_es");
+$app->get("/fr/privacy","page.controller:defaultAction")->bind("privacy_policy_fr");
+$app->get("/en/privacy","page.controller:defaultAction")->bind("privacy_policy_en");

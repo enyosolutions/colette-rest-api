@@ -1,0 +1,65 @@
+ {% set origin = cities[search.origin] %}
+ {% set destination = cities[search.destination] %}
+ {% set isDisabled = date(search.startDate) < date() %}
+ {% set isSingletrip = (search.endDate is not empty) %}
+<article
+        data-tags="tripidea {{ destination.tags | join(" ") }} "
+        data-kwg-city="{{ destination.code }}"
+        data-kwg-hash="{{ search.hash }}"
+        data-kwg-type="tripidea" data-kwg-visibility="public"
+        class="card bookmark  _search-result  kenweego-collection {{ destination.code }} tripidea {{ destination.tags | join(" ") }}
+             {% if isDisabled %} disabled {% endif %}
+             ">
+        {% set shareUrl = fare.url %}
+        {% include 'Dashboard/Bookmark/actionsBlock.html.twig' %}
+    <div class="featured-img-inner">
+    <a href="{{ fare.url }}" class="featured-image btn-view-bookmark" target="_blank" style="">
+        <i class="fa fa-lightbulb-o text-yellow stamp" data-toggle="tooltip" title=""
+                title="{{ 'dashboard.bookmark.ideas.label' | trans }}"
+                ></i>
+        <img alt="{{ destination.code }}" title=""
+             src="/data/city/{{ destination.code }}/pictures/thumb.jpg">
+
+    </a>
+    </div>
+    <div class="card-details ">
+        <h4 class="card-title"><a href="{{ fare.url }}" target="_blank"><i
+                        class="fa fa-map-marker"></i> {{ destination.name }}
+                , {{ destination.country }}  {% if fare.fare.price is not null %}
+                    <span class="text-primary price pull-right">{{ fare.fare.price |round}}{{ app.currency.symbol }}</span>{% endif %}
+            </a></h4>
+
+        <div class="meta-details clearfix">
+            <ul class="hierarchy">
+                <li class="symbol"><i class="fa"></i></li>
+                <li>
+                    <b>{{ search.startDate | date('d/m/Y') }}</b>
+                    {% if search.endDate is not null %}    -
+                    <b>{{ search.endDate | date('d/m/Y') }} {% endif %}</b></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mask hidden">
+        <a class="select btn btn-primary btn-flat btn-choose btn-view" target="_blank"
+           href="javascript:void(0)"
+                ><i
+                    class="fa fa-check fa-repeat"></i> {{ 'View' | trans }}
+        </a>
+        <a class="btn btn-primary btn-flat btn-details text-color-white" target="_blank"
+           a="http://hotels.kenweego.com"
+                ><i
+                    class="fa fa-eye"></i> {{ 'button.view.hotels' | trans }}
+        </a>
+        <a class="btn btn-primary btn-flat btn-details text-color-white" target="_blank"
+           onclick="Search.Views.displayCityDetails(this);"
+           href="javascript:void(0)"><i
+                    class="fa fa-eye"></i> {{ 'details.menu.button' | trans }}
+        </a>
+        <i
+                class="fa fa-trash"></i>
+        <i
+                class="btn-trash-destination text-color-white fa fa-share-alt"></i>
+    </div>
+
+</article>

@@ -1,0 +1,129 @@
+{#
+Template for an email message sent to confirm an email address.
+Variables passed to this template:
+    user: The SimpleUser\User instance.
+    confirmationUrl: The link to click to complete the confirmation process.
+#}
+
+
+{%- block subject -%}
+    {{ 'email.invite.title' |trans({'%name%':fromUser.firstname ~ ' '~fromUser.lastname}) }}
+{%- endblock -%}
+
+{# The plain text message. #}
+{%- block body_text -%}{%- autoescape false -%}
+{%- endautoescape -%}{%- endblock -%}
+
+{# The HTML message. Optional. #}
+{%- block body_html -%}
+
+    {# The subject line. #}
+    <img src="{{ pixelImg }}"
+         width="1" height="1"
+         style="" border="0"/>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-moz-font-smoothing: antialiased; -ms-font-smoothing: antialiased; -webkit-font-smoothing: antialiased
+sed; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 100%;">
+        <tr>
+            <td style="padding: 10px 0 30px 0;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+                       style="border: 1px solid #cccccc; border-collapse: collapse;border-radius:4px">
+                    <tr>
+                        <td align="center" bgcolor="#ff584B"
+                            style="padding: 20px 0 20px 0; color: #333333; font-size: 28px; font-weight: bold; font-family: sans-serif, tahoma;">
+                            <center>
+                                <img src="https://kenweego.com/img/logo-white.jpg" alt="Kenweego" width="160"
+                                     height="90"
+                                     style="display: block;"/>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #555; font-weight:bold;text-transform:uppercase; font-family: sans-serif; font-size: 26px;">
+                                        <b>{{ title }}</b>
+                                        <br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #555555; font-family: sans-serif; font-size: 20px;">
+                                        <b>Hello {{ toUser.firstname}},</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 30px 0; color: #666; font-family: sans-serif; font-size: 17px; line-height: 1.5;">
+                                        {{ 'email.friendrequest.introtext' | trans({'%name%':fromUser.firstname ~' '~fromUser.lasstname }) |raw }}
+                                        <br/>
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td align="center" style="padding:10px;  color: #555; font-family: sans-serif; font-size: 16px; line-height: 20px;">
+                                        <br/>
+                                        <p>
+                                        <a href="https://kenweego.com{{ path('user.dashboard',{id: toUser._id}) }}"
+                                           style="font-family: sans-serif; text-decoration:none;color:#fff;text-align: center;width:100%;background-color: #ff584B; border-radius: 3px;padding:10px 15px;">
+                                            {{ 'email.friendrequest.reply.button'| trans }}
+                                        </a>
+                                            &nbsp;
+                                            <a href="https://kenweego.com{{ path('user.view',{id: fromUser._id}) }}"
+                                               style="font-family: sans-serif; text-decoration:none;color:#fff;text-align: center;width:100%;background-color: #ff584B; border-radius: 3px;padding:10px 15px;">
+                                                {{ 'email.friendrequest.viewprofile.button'| trans }}
+                                            </a>
+                                        </p>
+                                        <br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="padding:10px;  color: #555; font-family: sans-serif; font-size: 16px; line-height: 20px;">
+<br/>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td bgcolor="#ff584B" style="padding: 30px 30px 30px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #333; font-family: sans-serif; font-size: 14px;" width="75%">
+                                        &reg; Kenweego, 2016 - <span
+                                                style="color: #fff;"> {{ 'email.weeklyfares.share' |trans }}</span>
+                                    </td>
+                                    <td align="right" width="25%">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.twitter.com/kenweego{{ locale =='FR'?'FR':'EN' }}"
+                                                       style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Twitter.png"
+                                                             alt="Twitter" width="38" height="38"
+                                                             style="display: block;" border="0"/>
+                                                    </a>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.facebook.com/kenweego{{ locale =='FR'? 'voyages' :'travels' }}"
+                                                       style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Facebook.png"
+                                                             alt="Facebook" width="38" height="38"
+                                                             style="display: block;" border="0"/>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{%- endblock -%}

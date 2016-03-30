@@ -1,0 +1,52 @@
+<div id="invite-modal" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title">{{ 'invite.title' | trans }}</h2>
+            </div>
+            <div class="modal-body">
+                <div id="invite-notifications-block-zone">
+                    {% include 'common/notifications.html.twig' %}
+                </div>
+                <p><b>{{ 'invite.text' | trans }}</b></p>
+				<p>
+
+						<form id="invite-form" class="form-horizontal ajaxform" method="POST"
+						  action="{{ path('user.invite',{id:app.user.id}) }}">
+						<div class="form-group">
+							<div class="col-sm-10 col-sm-offset-1">
+								<select multiple class="form-control" name="emails[]"  id="inputEmails"
+									   placeholder="{{ 'invite.emails' | trans }}"
+                                       title="{{ 'invite.emails' | trans }}"
+
+									   required >
+                                    </select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-10 col-sm-offset-1">
+								<textarea class="form-control" name="message" id="inputMessage" placeholder="Message..."
+										  rows="6" required></textarea>
+							</div>
+						</div>
+						<br/>
+						<div class="form-group">
+							<div class="col-sm-2 col-sm-offset-9">
+                                <input type="hidden" name="properties" value="{{ app.request.get('_route') }}" />
+								<button type="submit" class="btn btn-primary loading-state"
+										style="float:right;">{{ 'Send' | trans }}</button>
+							</div>
+						</div>
+
+					</form>
+
+				</p>
+            </div>
+            <div class="modal-footer">
+
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+{% if shareLink is not defined %}
+{%  set shareLink = 'https://' ~ app.request.host ~ app.request.requestUri %}
+{% endif %}
+{% if shareTitle is not defined or shareTitle is null%}
+    {% if seo is defined %}
+    {%  set shareTitle =  seo.title %}
+    {% else %}
+    {%  set shareTitle =  'default.seo.title' |trans %}
+    {% endif %}
+{% endif %}
+<ul class="share-buttons">
+    <li class="first">{{ 'Share' | trans }}</li>
+    <li><a href="https://www.facebook.com/sharer/sharer.php?t={{ shareTitle }}&u={{shareLink}}" target="_blank"><img src="/img/share_icons/Facebook.png"></a></li>
+    <li><a href="https://twitter.com/intent/tweet?source=kenweego.com&text={{ shareTitle }}:{{shareLink}} &via=kenweego{{ app.locale }}" target="_blank" title="Tweet"><img src="/img/share_icons/Twitter.png"></a></li>
+    <li><a href="https://plus.google.com/share?url={{shareLink}}" target="_blank" title="Share on Google+"><img src="/img/share_icons/Google+.png"></a></li>
+    <li><a href="mailto:?subject={{ shareTitle }}&body={{shareLink}}" target="_blank" title="Email"><img src="/img/share_icons/Email.png"></a></li>
+</ul>

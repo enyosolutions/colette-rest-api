@@ -1,0 +1,89 @@
+{% extends 'layout.html.twig' %}
+{% set active = 'homepage' %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% if app.debug %}
+        <link rel="stylesheet" href="/css/splash.css?v={{ app['assets.css.version'] }}">
+        <link rel="stylesheet" href="/css/search/search.forms.css?v={{ app['assets.css.version'] }}">
+    {% else %}
+        <link rel="stylesheet" href="/css/home.min.css?v={{ app['assets.css.version'] }}">
+    {% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="home-title row">{{ 'You say when...'|trans }} {{ 'we say where !'|trans }}</h1>
+    <div id="search-alert">
+    </div>
+<div id='homebox' class="homebox card vcenter landing"
+     style="{% if query is defined %}width:100%;margin-left:0%;{% endif %}">
+
+
+    <div class="home-subtext alt-color"> {{ 'splash.home.subtext'| trans }}</div>
+
+    <p class="subline" style="text-align:center;">{{ 'splash.home.promise' | trans }} <a data-toggle="collapse"
+                                                                                         href="#collapsedInfo"
+                                                                                        >
+            <sup class="optional"> {{ 'how' | trans }} <i class="fa fa-question-circle color-primary"></i></sup></a>
+    </p>
+
+
+    <div id="collapsedInfo" class="explanation alt-color collapse form-step">
+        <button type="button" class="close" data-toggle="collapse" data-target="#collapsedInfo" aria-hidden="true">
+            ×
+        </button>
+        <ul class="expl-ul">
+            <li>{{ 'splash.home.expl.1' | trans }} </li>
+            <li>{{ 'splash.home.expl.2' | trans }} <sup class="optional"> {{ 'optional' | trans }}</sup></li>
+            <li> {{ 'splash.home.expl.3' | trans }} <sup class="optional ">  {{ 'optional' | trans }}</sup></li>
+            <li class="text-inverse"> {{ 'splash.home.expl.4' | trans }}</li>
+        </ul>
+        <div class="result">
+            {{ 'splash.home.expl.result' | trans | raw }}
+        </div>
+    </div>
+    <br/>
+    <div class="text-center">
+       Nous sommes actuellement en maintenance, pour rajouter une nouvelle fonctionnalité. <br/>Vous voulez êtes prévenue quand la nouvelle version est en ligne ?<br/>
+        {% include 'common/newsletter.form.html.twig' %}
+    </div>
+</div>
+    <div id="search-cities" class="">
+        <h4>{{ 'Searching airfares for'| trans }} : </h4>
+
+        <div class="clearfix"></div>
+        <img alt="" class="cities-gif opacity-delay-1" id="thread-gif-1" src="/img/gifs/cities1.gif"><img alt=""
+                                                                                                          class="cities-gif opacity-delay-2"
+                                                                                                          id="thread-gif-2"
+                                                                                                          src="/img/gifs/cities2.gif">
+        <img alt="" class="cities-gif opacity-delay-3" id="thread-gif-3" src="/img/gifs/cities3.gif">
+        <img alt="" lass="cities-gif opacity-delay-4"
+             id="thread-gif-4"
+             src="/img/gifs/cities4.gif">
+    </div>
+
+    {% endblock %}
+
+    {% block javascripts %}
+    {{ parent() }}
+    {% if app.debug %}
+        <script src="/js/analytics/search.analytics.js"></script>
+    {% else %}
+        <script src="/js/home.min.js?v={{ app['assets.js.version'] }}"></script>
+    {% endif %}
+    <script>
+        $(function () {
+            if (analytics) {
+                analytics.page("Maintenance");
+            }
+        });
+
+
+        Search.Controller.isAsync = false;
+    </script>
+    {% include 'common/contest.html.twig' %}
+
+{% endblock %}

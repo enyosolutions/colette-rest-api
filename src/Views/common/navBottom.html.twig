@@ -1,0 +1,57 @@
+<nav class="navbar navbar-default navbar-bottom" role="navigation">
+    <div class="container-fluid">
+
+        <div class="navbar-footer">
+            <ul class="nav navbar-nav">
+                {#<li><a href="{{ path('page.recentSearches') }}">{{ 'Recent searches' | trans }}</a></li>#}
+                <li>
+					<a data-kwg-track-click="Clicked NavMenu"
+                       data-kwg-track-props-via="footer"
+                       data-kwg-track-props-menu="news"
+                       class="news-link" href="http://blog.kenweego.com/{{ app.locale }}/">{{ 'menu.news' | trans }}</a>
+                </li>
+                <li>
+                    <a data-kwg-track-click="Clicked NavMenu"
+                       data-kwg-track-props-via="footer"
+                       data-kwg-track-props-menu="privacy-policy"
+                       href="{{ app.request.getSchemeAndHttpHost() }}{{ path('privacy_policy_' ~ (app.locale == 'fr' ? 'fr' : 'en')) }}">{{ 'privacy.policy.link' | trans | raw }}</a>
+                </li>
+                <li>
+					<a data-kwg-track-click="Clicked NavMenu"
+                       data-kwg-track-props-via="footer"
+                       data-kwg-track-props-menu="about"
+                       class="contact-link" href="{{ app.request.getSchemeAndHttpHost() }}{{ path('about_page_'~ app.locale) }}"
+                       hreflang="{{ app.locale }}">{{ 'about.page.link' | trans }}</a>
+				</li>
+                {# <li><a class="contact-link" href="{{ app.request.getSchemeAndHttpHost() }}{{ path('page.contact') }}"
+                        hreflang="{{ app.locale }}">{{ 'the.team' | trans }}</a></li>
+                        #}
+                <li class="dropdown"><a class="contact-link"
+                                        data-kwg-track-click="Clicked NavMenu"
+                                        data-kwg-track-props-via="footer"
+                                        data-kwg-track-props-menu="contact"
+                                        href="{{ app.request.getSchemeAndHttpHost() }}{{ path('page.contact') }}"
+                                        hreflang="{{ app.locale }}">{{ 'Contact' | trans }}</a></li>
+                {#  <li><a data-toggle="modal" class="contact-link" data-target="#contact-modal" href="javascript:void(0)" hreflang="{{ app.locale }}" >Contact</a></li> #}
+
+                <li class="user-account-choice">
+                    {% if app.user %}
+                        <a
+                                data-kwg-track-click="Clicked NavMenu"
+                                data-kwg-track-props-via="footer"
+                                data-kwg-track-props-via="dashboard"
+                                href="{{ app.request.getSchemeAndHttpHost() }}{{ path('user_dashboard_index') }}"><i
+                                    class="fa fa-dashboard"></i> {{ 'Your Dashboard' | trans }}</a>
+                    {% else %}
+                        <a
+                           href="javascript:App.User.views.showRegisterPopup()" data-kwg-track-click="Clicked Signup | Clicked NavMenu"
+                           data-kwg-track-props-via="footer"
+                           data-kwg-track-props-menu="signup"
+                                ><i
+                                    class="fa fa-sign-up"></i> {{ 'signup.button.label' | trans }}</a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

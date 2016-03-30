@@ -1,0 +1,47 @@
+{% extends 'Layout/layout-v2.html.twig' %}
+{% set active = 'cms_page' %}
+
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/css/pages/pages.css?v={{ app['assets.css.version'] }}">
+    {{ parent() }}
+
+        <link rel="stylesheet" href="/css/xxx.css?v={{ app['assets.css.version'] }}">
+    {% if  page.code is defined %}
+        <link rel="stylesheet" href="/css/{{ page.code }}.min.css?v={{ app['assets.css.version'] }}">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="main" style="background-image:url(/img/landing/2.jpg);background-size: cover">
+    <br/>
+    <br/>
+    <br/>
+    <div class="row">
+    <article id="page.code" class="card cms-page page-body">
+        <h1 class="page-title">{{ page.title }}</h1>
+        <hr>
+        <div class="page-content">{{ page.content | raw }}</div>
+    </article>
+</div></section>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if app.debug %}
+        <!-- <script src="/js/plugins/bootstrap-typeahead.js"></script> -->
+        <script src="/js/xxx.js?v={{ app['assets.js.version'] }}"></script>
+    {% else %}
+        <script src="/js/xxx.min.js?v={{ app['assets.js.version'] }}"></script>
+
+    {% endif %}
+    {% if app.locale  != 'en' %}
+        <script src="/js/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.{{ app.locale }}.js"></script>
+    {% endif %}
+    <script>
+
+    </script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% set destination = app['cache.service'].getCity(bookmark.item.code) %}
+<article data-kwg-city="{{ destination.code }}"
+         data-kwg-id="{{ bookmark._id }}"
+         data-tags="{{ bookmark.type }} {{ bookmark.tags | join(" ") }}"
+         data-kwg-type="{{ bookmark.type }}" data-kwg-visibility="{{ bookmark.visibility }}"
+         class="place-box card bookmark {{ bookmark.type }} {{ bookmark.tags | join(" ") }} "
+        >
+    {% set shareUrl = 'https://' ~ app.request.host  ~ path('destination.city',{city: bookmark.item.code}) %}
+    {% include 'Dashboard/Bookmark/actionsBlock.html.twig' %}
+    <a href="{{ path('destination.city',{city: destination.code}) }}" target="_blank"
+       class="place-link btn-view-destination-bookmark"
+       title="{{ destination.intl[app.locale].name }}">
+        <header>
+            <h3 class="entry-title"><i
+                        class="fa fa-map-marker"></i>{{ destination.intl[app.locale].name }}
+                - {{ destination.intl[app.locale].country }}</h3></header>
+        <div class="entry-thumbnail">
+            {% if bookmark.ownerId != app.user.id %}
+                <i class="fa fa-lightbulb-o text-yellow stamp" data-toggle="tooltip"
+                   title="{{ 'dashboard.bookmark.ideas.label' | trans }}"
+                        ></i>
+            {% endif %}
+            <img alt="{{ destination.code }}" title=""
+                                          src="/data/city/{{ destination.code }}/pictures/thumb.jpg">
+        </div>
+    </a>
+</article>

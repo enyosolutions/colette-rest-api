@@ -1,0 +1,220 @@
+<div class="navbar-header">
+    <a href="{{ path('destination.city',{city: city.code ~ '_' ~ (city.intl[app.locale].name | slugify)}) }}"
+       class="navbar-brand scrollTop"><i
+                class="fa fa-fw fa-map-marker"></i> {{ city.intl[app.locale].name }}
+        , {{ city.intl[app.locale].country }}</a>
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+            data-target="#navbar-sub">
+					<span class="sr-only">
+						Toggle navigation
+					</span>
+					<span class="icon-bar">
+					</span>
+					<span class="icon-bar">
+					</span>
+					<span class="icon-bar">
+					</span>
+    </button>
+</div>
+<!-- Sub Nav Links -->
+<nav class="navbar-collapse collapse" id="navbar-sub">
+    <ul class="nav navbar-nav navbar-left">
+
+        {#
+        <li>
+            <a href="destinations-list.html">{{ 'places.label'|trans }}</a>
+        </li>
+        <li class="dropdown show-on-hover">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'information.label'|trans }}
+                <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="guide-single.html">{{ 'about.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'planning.a.trip.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'getting.around.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'history.culture.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'top.attractions.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'travel.resources.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'highlights.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'events.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="guide-single.html">{{ 'itineraries.label'|trans }}</a>
+                </li>
+            </ul>
+        </li>
+        <li class="dropdown show-on-hover">
+            <a href="directory-category.html" class="dropdown-toggle"
+               data-toggle="dropdown">{{ 'directory.label'|trans }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="directory-category.html">{{ 'food.drinks.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'attractions.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'services.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'activities.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'shopping.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'nightlife.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="directory-category.html">{{ 'tours.label'|trans }}</a>
+                </li>
+            </ul>
+        </li>
+        #}
+
+        <li class="dropdown show-on-hover">
+            <a data-toggle="scrollto"
+               href="{{ (active is defined and active == "citypage" ? "": path('destination.city',{city: city.code ~ '_' ~ (city.intl[app.locale].name | slugify) }) ) }}#information"
+               class="dropdown-toggle"
+               data-toggle="dropdown"
+                    >{{ 'best.information.menu.label'|trans }} <span class="caret"></span></a>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a
+                            data-kwg-track-click="Clicked SubnavMenu"
+                            data-kwg-track-props-via="header"
+                            data-kwg-track-props-menu="transportation"
+                            href="{{ path('destination_details', {'cityCode':city.code, 'details': ('routes.transportation.label'|trans)}) }}">{{ 'transportation.label'|trans }}</a>
+                </li>
+                <li>
+                    <a data-kwg-track-click="Clicked SubnavMenu"
+                       data-kwg-track-props-via="header"
+                       data-kwg-track-props-menu="summary"
+                       href="{{ path('destination_details', {'cityCode':city.code, 'details': ('routes.summary.label'|trans)}) }}">{{ 'summary.label'|trans }}</a>
+                </li>
+                <li>
+                    <a data-kwg-track-click="Clicked SubnavMenu"
+                       data-kwg-track-props-via="header"
+                       data-kwg-track-props-menu="weather"
+                       href="{{ path('destination_details', {'cityCode':city.code, 'details': ('routes.weather.label'|trans)}) }}">{{ 'weather.label'|trans }}</a>
+                </li>
+                <li>
+                    <a data-kwg-track-click="Clicked SubnavMenu"
+                       data-kwg-track-props-via="header"
+                       data-kwg-track-props-menu="budget"
+                       href="{{ path('destination_details', {'cityCode':city.code, 'details': ('routes.budget.label'|trans)}) }}">{{ 'budget.label'|trans }}</a>
+                </li>
+                <li>
+                    <a
+                            data-kwg-track-click="Clicked SubnavMenu"
+                            data-kwg-track-props-via="header"
+                            data-kwg-track-props-menu="currency"
+                            href="{{ path('destination_details', {'cityCode':city.code, 'details': ('routes.currency.label'|trans)}) }}">{{ 'currency.label'|trans }}</a>
+                </li>
+
+            </ul>
+        </li>
+        <li>
+            <a
+                    data-toggle="scrollto"
+                    data-kwg-track-click="Clicked SubnavMenu"
+                    data-kwg-track-props-via="header"
+                    data-kwg-track-props-menu="places"
+                    href="{{ (active is defined and active == "citypage" ? "":path('destination.city',{city: city.code ~ '_' ~ (city.intl[app.locale].name | slugify)})) }}#places">{{ 'best.places.menu.label'|trans }}</a>
+        </li>
+        <li>
+            <a data-toggle="scrollto"
+               data-kwg-track-click="Clicked SubnavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="agenda"
+               href="{{ path('destination.agenda',{city: city.code }) }}">{{ 'agenda.menu.label'|trans }}</a>
+        </li>
+        <li>
+            <a data-kwg-track-click="Clicked SubnavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="blogArticles"
+               href="http://blog.kenweego.com/{{ app.locale }}?s={{ city.name }}">{{ 'articles.label'|trans }}</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <button class="btn-icon"
+                    data-kwg-track-click="Clicked SubNavMenu | Clicked Signin"
+                    data-kwg-track-props-via="header"
+                    data-kwg-track-props-menu="signin"
+                    id="star-destination-button"
+                    data-kwg-city="{{ city.code }}"
+                    title="{{ 'button.addtofavs.tooltips' | trans }}"
+                    data-toggle="tooltip"
+                    ><i
+                        class="btn-fav fa fa-fw {% if isBookmarked %}fa-star{% else %}fa-star-o{% endif %} text-yellow"></i></button>
+        </li>
+        <li class="dropdown show-on-hover">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i
+                        class="fa fa-fw fa-share-alt"></i></a>
+            <ul class="dropdown-menu" role="menu">
+                {% if shareLink is not defined %}
+                    {% set shareLink = 'https://' ~ app.request.host ~ app.request.requestUri %}
+                {% endif %}
+                {% if shareTitle is not defined or shareTitle is null %}
+                    {% if seo is defined %}
+                        {% set shareTitle =  seo.title %}
+                    {% else %}
+                        {% set shareTitle =  'default.seo.title' |trans %}
+                    {% endif %}
+                {% endif %}
+                <li>
+                    <a href="https://www.facebook.com/sharer/sharer.php?t={{ shareTitle }}&u={{ shareLink }}"
+                       target="_blank"
+                       onclick="return !window.open(this.href, 'facebook', 'width=500,height=500')"
+                            ><i
+                                class="fa fa-fw fa-facebook-official"></i> {{ 'facebook.label'|trans }}
+                    </a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/intent/tweet?source=kenweego.com&text={{ shareTitle }}:%20{{ shareLink }} &via=kenweego{{ app.locale }}"
+                       target="_blank"
+                       onclick="return !window.open(this.href, 'twitter', 'width=500,height=500')"
+                            ><i
+                                class="fa fa-fw fa-twitter"></i> {{ 'twitter.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="https://plus.google.com/share?url={{ shareLink }}" data-toggle=""
+                       target="_blank"
+                       onclick="return !window.open(this.href, 'facebook', 'width=500,height=500')"
+                            ><i
+                                class="fa fa-fw fa-google-plus"></i> {{ 'google.label'|trans }}</a>
+                </li>
+                <li>
+                    <a href="mailto:?subject={{ shareTitle }}&body=:%20{{ shareLink }}"><i
+                                class="fa fa-fw fa-envelope"></i> {{ 'email.trans'|trans }}</a>
+                </li>
+            </ul>
+        </li>
+        {#
+        <li>
+            <a href="#" data-toggle="tooltip" title="{{ 'download.in.pdf.format.label'|trans }}."><i
+                        class="fa fa-fw fa-file-pdf-o"></i></a>
+        </li>
+        <li>
+            <a href="#" data-toggle="tooltip" title="{{ 'print.and.take.with.you.label'|trans }}!"><i
+                        class="fa fa-fw fa-print"></i></a>
+        </li>
+        #}
+    </ul>
+</nav>
+

@@ -1,0 +1,40 @@
+<article
+        data-tags="{{ bookmark.type }} {{ bookmark.tags | join(" ") }} "
+        data-kwg-id="{{ bookmark._id }}"
+        data-kwg-type="{{ bookmark.type }}" data-kwg-visibility="{{ bookmark.visibility }}"
+        class="card bookmark  _search-result {{ bookmark.type }} {{ bookmark.tags | join(" ") }}
+             ">
+    {% set shareUrl = bookmark.url %}
+    {% include 'Dashboard/Bookmark/actionsBlock.html.twig' %}
+    {% if bookmark.image %}
+    <a href="javascript:;" class="featured-image btn-view-bookmark" target="_blank" style="" >
+        {% if bookmark.ownerId != app.user.id %}
+            <i class="fa fa-lightbulb-o text-yellow stamp" data-toggle="tooltip"
+               title="{{ 'dashboard.bookmark.ideas.label' | trans }}"
+                    ></i>
+        {% endif %}
+        <img alt="{{ bookmark.title }}" title="{{ bookmark.title }}"
+             src="{{ bookmark.image }}">
+        {% set price = (not bookmark.price is empty ? bookmark.price : (not bookmark.item.price is empty ? bookmark.item.price : null))  %}
+        {% if not price is empty %}
+            <span
+                    class='text-primary btn-xs pull-right'><b>{{ price |round }} {{ app.currency.symbol }}</b></span>
+        {% endif %}
+        <div class="featured-img-inner">
+
+        </div>
+    </a>
+    {% endif %}
+
+    <div class="card-details ">
+        <h4 class="card-title"><a href="{{ bookmark.url }}" target="_blank" class="link-icon-hover"><i
+                        class="fa fa-link"></i> {{ bookmark.title }}
+
+            </a></h4>
+
+        <div class="meta-details clearfix">
+           {{ bookmark.description }}
+        </div>
+    </div>
+
+</article>

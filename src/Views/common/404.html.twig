@@ -1,0 +1,98 @@
+{% extends 'Layout/layout-v2.html.twig' %}
+{% set active = 'homepage' %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section
+    ================================================== -->
+
+
+    <!-- Main Section
+    ================================================== -->
+    <section class="main" style="background-image:url(/img/landing/2.jpg);background-size: cover">
+        <br/>
+        <br/>
+        <br/>
+        <div class="row">
+
+            <h1 class="home-title row">{{ 'UH OH...'|trans }}</h1>
+
+            <div class="col-xs-12 col-md-10 col-lg-8 col-lg-offset-2 col-md-offset-1">
+                <article id="post-333" class="page type-page status-publish has-post-thumbnail hentry">
+                    <div class="entry-content">
+                        <article id="page.code" class="card page-body cms-page">
+                            <div class="page-content">
+                                <h1 class="home-title" style="color:#ff584B;">{{ 'UH OH...' | trans }}</h1>
+                                <div class="modal-body">
+                                    <div class="home-subtext"> {% if extraMessage is defined and not extraMessage is empty%} {{ extraMessage | trans }} {% else %}  {{ '404.wrong.page'| trans }} {% endif %} </div>
+                                    <br/>
+                                    <hr/>
+                                    <p>
+
+                                    <form id="contact-form" class="form-horizontal ajaxform" method="POST" action="{{ path('mail.send') }}">
+                                        <div class="form-group">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <input class="form-control" name="email" type="email" id="inputEmail" placeholder="{{ 'your.email' |trans }}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <input class="form-control" name="subject" type="text" id="inputSubject" placeholder="{{ 'your.subject' |trans }}"
+                                                       required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <!--<input class="form-control" name="message" type="textarea" id="input-message" placeholder="Message" required> -->
+                                                <textarea class="form-control" name="message" id="inputMessage" placeholder="Message..."
+                                                          rows="6" required></textarea>
+                                            </div>
+                                        </div>
+                                        <br/><br/><br/>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <input class="form-control" name="sec" type="sec" id="inputSec"
+                                                       placeholder="1 + 3 + 105 = ? " required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-8 col-sm-offset-2">
+                                                <button type="submit" class="btn btn-primary"
+                                                        style="float:right;">{{ 'Send' | trans }}</button>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        {% if app.debug %}
+        {% else %}
+        {% endif %}
+        <script>
+            $(function () {
+                if (analytics) {
+                    analytics.page("404",{extraMessage: extraMessage});
+                }
+            });
+
+        </script>
+    {% endblock %}

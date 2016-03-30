@@ -1,0 +1,10 @@
+<?php
+$app->get("/en/about","page.controller:defaultAction")->bind("about_page_en");
+$app->get("/fr/qui-sommes-nous","page.controller:defaultAction")->bind("page_theteam_fr");
+$app->get("/de/privacy","page.controller:defaultAction")->bind("about_page_de");
+$app->get("/es/privacidad","page.controller:defaultAction")->bind("privacy_policy_es");
+$app->get("/fr/privacy","page.controller:defaultAction")->bind("privacy_policy_fr");
+$app->get("/en/privacy","page.controller:defaultAction")->bind("privacy_policy_en");
+$app->get("/fr/a-propos","page.controller:defaultAction")->bind("about_page_fr");
+$app->get("/es/acerca-de-nosotros","page.controller:defaultAction")->bind("about_page_es");
+$app->get("/en/who-are-we","page.controller:defaultAction")->bind("page_theteam_en");

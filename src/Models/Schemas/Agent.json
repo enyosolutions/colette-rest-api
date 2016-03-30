@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/",
+    "type": "object",
+    "properties": {
+        "id": {
+            "id": "id",
+            "type": "string"
+        },
+        "code": {
+            "id": "code",
+            "type": "code"
+        },
+        "name": {
+            "id": "name",
+            "type": "string"
+        },
+        "type": {
+            "id": "type",
+            "type": "string"
+        },
+        "picture": {
+            "id": "picture",
+            "type": "string"
+        },
+        "fees": {
+            "id": "fees",
+            "type": "array",
+            "properties": {
+                "title": {
+                    "id": "title",
+                    "type": "string"
+                },
+                "amount": {
+                    "id": "amount",
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "required": [
+        "code",
+        "title",
+        "slug",
+        "content"
+    ]
+}

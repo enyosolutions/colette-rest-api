@@ -1,0 +1,91 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/",
+    "type": "object",
+    "properties": {
+        "title": {
+            "id": "title",
+            "type": "string"
+        },
+        "description": {
+            "id": "description",
+            "type": "string"
+        },
+        "type": {
+            "id": "type",
+            "type": "string"
+        },
+        "ownerId": {
+            "id": "ownerId",
+            "type": "string"
+        },
+        "ownername": {
+            "id": "ownername",
+            "type": "string"
+        },
+        "createdat": {
+            "id": "createdat",
+            "type": "string"
+        },
+        "maxVotesAllowed": {
+            "id": "maxVotesAllowed",
+            "type": "string"
+        },
+        "choices": {
+            "id": "choices",
+            "type": "array",
+            "items": {
+                "id": "0",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "id": "id",
+                        "type": "string"
+                    },
+                    "title": {
+                        "id": "title",
+                        "type": "string"
+                    },
+                    "text": {
+                        "id": "text",
+                        "type": "string"
+                    },
+                    "votes": {
+                        "id": "votes",
+                        "type": "array",
+                        "items": {
+                            "id": "0",
+                            "type": "object",
+                            "properties": {
+                                "createdat": {
+                                    "id": "createdat",
+                                    "type": "string"
+                                },
+                                "userId": {
+                                    "id": "userId",
+                                    "type": "string"
+                                },
+                                "username": {
+                                    "id": "username",
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "id": "value",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "required": [
+        "title",
+        "type",
+        "ownername",
+        "createdat",
+        "maxVotesAllowed",
+        "choices"
+    ]
+}

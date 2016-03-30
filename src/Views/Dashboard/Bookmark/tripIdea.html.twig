@@ -1,0 +1,87 @@
+{% set search = bookmark.item %}
+{% set origin = cities[search.origin] %}
+{% set destination = cities[search.destination] %}
+ {% set isDisabled = date(search.startDate) < date() %}
+{% if not isDisabled and search.startDate is not null %}
+    {% set url = ( search.endDate is not null ?
+    path('search_flights_roundtrip',{origin: search.origin, destinations:search.destination,
+    startDate: search.startDate , endDate: search.endDate , passengers: '1-0-0'}) :
+    path('search_flights_singletrip',{origin: search.origin, destinations:search.destination,
+    startDate: search.startDate , passengers: '1-0-0'})) %}
+{% endif %}
+<article
+        data-tags="{{ bookmark.type }} {{ bookmark.tags | join(" ") }} "
+        data-kwg-city="{{ destination.code }}"
+        data-kwg-hash="{{ search.hash }}"
+        data-kwg-id="{{ bookmark._id }}"
+        data-kwg-type="{{ bookmark.type }}"
+        data-kwg-visibility="{{ bookmark.visibility }}"
+        class="card bookmark  _search-result  {{ destination.code }} {{ bookmark.type }} {{ bookmark.tags | join(" ") }}
+             {% if isDisabled %} disabled {% endif %}
+             ">
+    {% set shareUrl = url %}
+    {% include 'Dashboard/Bookmark/actionsBlock.html.twig' %}
+    <a href="javascript:;" class="featured-image btn-view-tripidea-bookmark" target="_blank" style="">
+        {% if bookmark.ownerId != app.user.id %}
+        <i class="fa fa-lightbulb-o text-yellow stamp" data-toggle="tooltip"
+           title="{{ 'dashboard.bookmark.ideas.label' | trans }}"
+                ></i>
+        {% endif %}
+
+        <img alt="{{ destination.code }}" title=""
+             src="/data/city/{{ destination.code }}/pictures/thumb.jpg">
+
+        <div class="featured-img-inner">
+
+
+        </div>
+    </a>
+
+    <div class="card-details ">
+        <h4 class="card-title"><a href="{{ url }}" target="_blank" class="link-icon-hover"><i
+                        class="fa fa-map-marker"></i> {{ destination.intl[app.locale].name }}
+                , {{ destination.intl[app.locale].country }}  {% if search.price is not null %}
+
+                    {% set price = (not bookmark.price is empty ? bookmark.price : (not bookmark.item.price is empty ? bookmark.item.price : null))  %}
+                    {% if not price is empty %}
+                        <span
+                                class='text-primary btn-xs pull-right'><b>{{ price |round }} {{ app.currency.symbol }}</b></span>
+                    {% endif %}
+                   {% endif %}
+            </a></h4>
+
+        <div class="meta-details clearfix">
+            <ul class="hierarchy">
+                <li class="symbol"><i class="fa"></i></li>
+                <li>
+                    <b>{{ search.startDate | date('d/m/Y') }}</b>
+                    {% if search.endDate is not null %}    -
+                    <b>{{ search.endDate | date('d/m/Y') }} {% endif %}</b></li>
+            </ul>
+            <div class="btn-block"> {{ 'label.departing.from' |trans }} <b>{{ origin.intl[app.locale].name }}</b></div>
+        </div>
+    </div>
+
+    <div class="mask hidden">
+        <a class="select btn btn-primary btn-flat btn-choose btn-view" target="_blank"
+           href="javascript:void(0)"
+                ><i
+                    class="fa fa-check fa-repeat"></i> {{ 'View' | trans }}
+        </a>
+        <a class="btn btn-primary btn-flat btn-details text-color-white" target="_blank"
+           a="http://hotels.kenweego.com"
+                ><i
+                    class="fa fa-eye"></i> {{ 'button.view.hotels' | trans }}
+        </a>
+        <a class="btn btn-primary btn-flat btn-details text-color-white" target="_blank"
+           onclick="Search.Views.displayCityDetails(this);"
+           href="javascript:void(0)"><i
+                    class="fa fa-eye"></i> {{ 'details.menu.button' | trans }}
+        </a>
+        <i
+                class="fa fa-trash"></i>
+        <i
+                class="btn-trash-destination text-color-white fa fa-share-alt"></i>
+    </div>
+
+</article>

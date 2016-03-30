@@ -1,0 +1,21 @@
+{%  set siteRootUrl = (absoluteurls) ? app.request.getSchemeAndHttpHost() ~'/'~ app.locale : '' %}
+{% if type is defined and type == 'standalone' %}
+    <link rel="stylesheet" href="{{ siteRootUrl }}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ siteRootUrl }}/css/material-kenweego.css">
+    <link rel="stylesheet" href="{{ siteRootUrl }}/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ siteRootUrl }}/css/fontello.css">
+    <style>
+    </style>
+    <script src="{{ siteRootUrl }}/js/libs/jquery.1.11.min.js"></script>
+    <script src="{{ siteRootUrl }}/js/libs/bootstrap.min.js"></script>
+{% endif %}
+<footer class="footer row">
+    <div class="container">
+        <div class="col-md-2">{% include 'common/socialIcons.html.twig' %}</div>
+        <div class="col-md-8">{% include 'common/navBottom.html.twig' %}</div>
+        <div class="col-md-2"><span class="skyscanner"><a style="display:inline-block;"  rel="nofollow"
+                        href='http://www.skyscanner.net'>{{ 'Flight search powered by ' | trans }}<img
+                            src="{{ siteRootUrl }}/img/partners/skyscanner.png" class="skyscanner"/></a></span> <a style="display:inline-block;" href="https://mixpanel.com/f/partner"><img src="//cdn.mxpnl.com/site_media/images/partner/badge_light.png" alt="Mobile Analytics" /></a></div>
+    </div>
+    <div class="pull-right"><span class="copyright">&copy; Kenweego SAS</span> v{{ app['version']  }}</div>
+</footer>

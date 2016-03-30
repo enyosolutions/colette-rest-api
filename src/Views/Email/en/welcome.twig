@@ -1,0 +1,193 @@
+{#
+Template for an email message sent to confirm an email address.
+Variables passed to this template:
+    user: The SimpleUser\User instance.
+    confirmationUrl: The link to click to complete the confirmation process.
+#}
+
+{# The subject line. #}
+{%- block subject -%}{%- autoescape false -%}
+Travel searching and planning, simplified !
+{%- endautoescape -%}{%- endblock -%}
+
+{# The plain text message. #}
+{%- block body_text -%}{%- autoescape false -%}
+
+Thank you so much for registering on Kenweego.
+We've created kenweego to help travelers find great travel destinations and great prices.
+<br/>
+<b>We hope that starting from now, finding your travel destinations will be much more simple.</b>
+
+<br/>	<br/>
+In addition to our destination search engine we have :
+A flight fare engine to search and compare multiple travel fares and agents easily.
+http://kenweego.com/en/flights
+
+
+
+An accommodation engine to search and compare different accommodation types in one place :  hostels, Hotels, Bed And Breakfast, Rentals etc.
+http://hotels.kenweego.com
+{%- endautoescape -%}{%- endblock -%}
+
+{# The HTML message. Optional. #}
+{%- block body_html -%}
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-moz-font-smoothing: antialiased; -ms-font-smoothing: antialiased; -webkit-font-smoothing: antialiased
+sed; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 100%;">
+        <tr>
+            <td style="padding: 10px 0 30px 0;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid #cccccc; border-collapse: collapse;border-radius:4px">
+                    <tr>
+                        <td align="center" bgcolor="#ff584B" style="padding: 20px 0 20px 0; color: #333333; font-size: 28px; font-weight: bold; font-family: sans-serif, tahoma;">
+                            <img src="https://kenweego.com/img/logo-white.jpg" alt="Kenweego" width="160" height="90" style="display: block;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #555; font-weight:bold;text-transform:uppercase; font-family: sans-serif; font-size: 26px;">
+                                        <b>Travel searching and planning, simplified.</b>
+                                        <br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #555555; font-family: sans-serif; font-size: 20px;">
+                                        <b>Hi {{user.firstname}},</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 30px 0; color: #666; font-family: sans-serif; font-size: 17px; line-height: 1.5;">
+                                        Thank you so much for registering on Kenweego.
+                                        We've created kenweego to help travelers find great travel destinations and great prices.
+                                        <br/>
+                                        <b>We hope that starting from now, finding your travel destinations will be much more simple.</b>
+
+                                        <br/>	<br/>
+                                        In addition to our destination search engine we have :
+
+                                        <ul>
+                                            <li style="padding-bottom: 10px;list-style-type: square;"><a href="https://www.kenweego.com/en/flights?utm_source=email&utm_campaign=welcome" style="color:#ff584B;text-decoration:none;"><b>A flight fare engine</b></a> to search and compare multiple travel fares and agents easily.</li>
+
+                                            <li style="padding-bottom: 10px;list-style-type: square;"><a href="http://hotels.kenweego.com?utm_source=email&utm_campaign=welcome" style="color:#ff584B;text-decoration:none;"><b>An accommodation engine</b></a> to search and compare different accommodation types in one place :<br/>
+                                                <b style="font-style:italic"> hostels, Hotels, Bed And Breakfast, Rentals etc. </b></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #555555; font-family: sans-serif; font-size: 25px;">
+                                        <hr>
+                                        <b>Users only features </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 20px 0 30px 0; color: #555; font-family: sans-serif; font-size: 17px; line-height: 20px;">
+                                        And a member of our community, you now have access to exclusive features:
+                                        <ul>
+
+                                            <li style="padding-bottom: 10px;list-style-type: square;">Your destinations prices will be updated automatically.</li>
+                                            <li style="padding-bottom: 10px;list-style-type: square;">You have a <a href="https://kenweego.com/en/user/dashboard?utm_source=email&utm_campaign=welcome" style="color:#ff584B;text-decoration:none;"><b>Personal travel board</b></a> to track your favorites destinations, and check the prices easily</li>
+
+                                        </ul>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#eee" style="padding:10px; border:1px solid #999; color: #555; font-family: sans-serif; font-size: 16px; line-height: 20px;border-radius:4px;">
+                                        We are continuously improving the website to meet your demands.
+                                        <br/>
+                                        <br>
+                                        Do you have any <b>suggestion, feature request, remark, comment or question <b> we would love hear about it.
+                                                Get in touch with us by <a href='mailto:feedback@kenweego.com' style="color:#ff584B;text-decoration:none;">email.</a>
+
+
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <hr>
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                            <tr>
+                                                <td style="color: #555555; font-family: sans-serif; font-size: 20px; text-align:center">
+
+                                                    <h2>Articles from our blog</h2>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="240" valign="top">
+                                                    <a href="http://blog.kenweego.com/en/the-weirdest-dishes-in-europe" style="text-decoration:none;">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                            <tr>
+                                                                <td>
+                                                                    <img src="http://blog.kenweego.com/wp-content/uploads/2015/07/Laverbread.jpg" alt="" width="100%" height="140" style="display: block;" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 25px 0 0 0; color: #ff584B; text-align:center; font-family: sans-serif; font-size: 20x; line-height: 20px;">
+                                                                    <a href="http://blog.kenweego.com/en/the-weirdest-dishes-in-europe" style="text-decoration:none;">The weirdest dishes in Europe.</a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </a>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="20">
+                                                    &nbsp;
+                                                </td>
+                                                <td width="240" valign="top">
+                                                    <a href="http://blog.kenweego.com/en/the-most-beautiful-beaches-in-europe" style="text-decoration:none;color:#ff584b;">
+                                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                            <tr>
+                                                                <td>
+                                                                    <img src="http://blog.kenweego.com/wp-content/uploads/2015/07/Plages.jpg" alt="" width="100%" height="140" style="display: block;" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="padding: 25px 0 0 0; color: #ff584B; text-align:center; font-family: sans-serif; font-size: 20x; line-height: 20px;">
+                                                                    <a href="http://blog.kenweego.com/en/the-most-beautiful-beaches-in-europe" style="text-decoration:none;color:#ff584b;">The most beautiful beaches in Europe.</a>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td bgcolor="#ff584B" style="padding: 30px 30px 30px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #333; font-family: sans-serif; font-size: 14px;" width="75%">
+                                        &reg; Kenweego, 2015 - <span style="color: #fff;" >If you like Kenweego, share it with your friends.</span>
+                                    </td>
+                                    <td align="right" width="25%">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.twitter.com/kenweegoEN" style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Twitter.png" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
+                                                    </a>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.facebook.com/kenweego" style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Facebook.png" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{%- endblock -%}

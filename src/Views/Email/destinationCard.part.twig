@@ -1,0 +1,97 @@
+    {% if loop.index % 2 == 1 %}<tr>{% endif %}
+    {% set originCity = app['cache.service'].getCity(item.query.origin) %}
+    <td width="240" valign="top">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%"
+               style="border:1px solid #cccccc; border-radius:2px; box-shadow: 0 0 3px #999; color:#555;">
+                <tr>
+
+                    <td>
+                        <a href="http://kenweego.com{{ item.url }}"
+                           style="text-decoration:none;">
+                            <img src="http://kenweego.com/data/city/{{ item.query.to }}/pictures/thumb.jpg"
+                                 alt="" width="100%" height="140"
+                                 style="display: block;"/>
+                        </a>
+                    </td>
+
+                </tr>
+            <tr>
+                <td style="padding: 25px 10px 0px 10px; color: #555; text-align:left; font-family: sans-serif; font-size: 20x; line-height: 1.5;">
+                    <a href="http://kenweego.com{{ item.url }}"
+                       style="text-decoration:none;color:#777;">
+                        <h3 class="deal-title text-black ">{{ item.city.infos.name | upper }}
+                            -
+                            {{ item.city.infos.country |upper }}  <span
+                                    style="float:right;background-color:#0f9d58;color:#fff;border-radius:1px; font-size: 15px;padding:5px;font-weight:400;"
+                                    class=''>
+                                                                            {{ item.fare.price|round }}{{ app.currency.symbol }}</span>
+
+                        </h3>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding:15px;padding-top:0; color:#777;">
+                    {# {{ item.query.endDate is defined ? ('roundtrip.shortlabel'|trans) : ('singletrip.shortlabel'|trans) }}#}
+                    <hr/>
+                    <div stlye="width:100%">
+                        {% if item.query.endDate is defined %}{{ 'from' |trans }}
+                            <b style="color:#555;text-decoration: none">{{ date(item.query.startDate)  | strftime('%a %d-%b') }}</b> {{ 'to' | trans }}
+                            <b style="color:#555;text-decoration: none">{{ date(item.query.endDate)  | strftime('%a %d-%b') }}</b>
+                            ({{ 'days' |transchoice( (item.query.endDate | date('d-M')) - (item.query.startDate | date('d-M')) + 1 ) }})
+                        {% else %}
+                            {{ 'the' |trans }} <b
+                                class="" style="color:#555;text-decoration: none">{{ date(item.query.startDate)  | strftime('%a %d-%b') }}</b>{% endif %}
+                    </div>
+
+                    <div  stlye="width:100%:font-style:italic;">{{ 'label.departing.from' | trans }}
+                        {{ originCity['intl'][app.locale].name }}, <a
+                                href="{{ item.hotelsUrl }}"
+                                style="color:#ff584B; padding:5px;font-style: italic;text-decoration: none;">{{ 'label.accommodation.prices.from'|trans }}
+                            <span
+                                    class="text-teal">{{ item.city.prices.accommodation is defined and item.city.prices.accommodation[item.city.prices.accommodation.cheapest] < 100 ? item.city.prices.accommodation[item.city.prices.accommodation.cheapest] : '12' }}{{ app.currency.symbol }}</span>
+                        </a>
+                    </div>
+                    <br/>
+                    {% if not item.city.infos.shortDescription is empty%}
+                        <div>
+                            {{ item.city.infos.shortDescription | striptags |slice(0,150) }}...
+                            {
+                            <a href="http://kenweego.com{{ path('destination.city',{city: item.city.code}) }}"
+                               style="color:#ff584B;padding:5px;font-weight:bold;font-style:italic;font-size:12px">
+                                {{ 'more' |trans }}
+                            </a>
+                        </div>
+{% endif %}
+                    <hr>
+                    <table style="with:100%;float:right;">
+
+                        <tr>
+                            <td style="text-align:center; background-color: #ff584B; border-radius:2px; padding:5px 10px;">
+                                <a href="http://kenweego.com{{ item.url }}"
+                                   style="text-decoration:none;color:#fff;text-align: center;width:100%;">
+                                    {{ 'view.flights'| trans }}
+                                </a>
+                            </td>
+                            <td style="text-align: center; background-color: #ff584B; border-radius:2px; padding:5px 10px;">
+                                <a href="{{ item.hotelsUrl }}"
+                                   style="text-decoration:none;color:#fff;text-align: center;with:100%;">
+                                    {{ 'button.view.hotels'| trans }}
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+    </td>
+    <td style="font-size: 0; line-height: 0;" width="20">
+        &nbsp;
+    </td>
+    {% if loop.index % 2 == 0 %}
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    {% endif %}

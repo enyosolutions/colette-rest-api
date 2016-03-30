@@ -1,0 +1,54 @@
+<div id="email-modal" class="modal notif fade email" tabindex="-1" role="dialog" aria-labelledby="EmailModalLabel"
+     data-backdrop="static"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h2 class="modal-title material-color"
+                    style="font-size:14pt;font-weight:500;font-style:italic;">{{ 'popup.newsletter.title' | trans }}</h2>
+            </div>
+            <div class="modal-body" style="font-size:12pt;font-weight:500;font-style:italic">
+                <div class="modal-text">
+                {{ 'popup.newsletter.text' |trans }}
+                </div>
+
+                <form action="{{ path('user.newsletter.register') }}" method="post" id="newsletter-popup-form">
+                    <div class="form-group form-group-material validate">
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                            <input type="text"
+                                   class="form-control material-input "
+                                   id="newsletter-name-id"
+                                   name="name"
+                                   placeholder="{{ 'Your name'| trans }}"
+                                   data-minLength="2"
+                                   autocomplete="off"
+                                   value=""
+                                   required
+                                    >
+                        </div>
+                        <div class="input-group">
+                            <div class="input-group-addon"><i class="fa fa-envelope-o"></i></div>
+                            <input type="email"
+                                   class="form-control material-input "
+                                   id="newsletter-email-id"
+                                   name="email"
+                                   placeholder="{{ 'Your email address'| trans }}"
+                                   data-minLength="2"
+                                   autocomplete="off"
+                                   value=""
+                                   required
+                                    >
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary btn-fab btn-fab-mini btn-fab-success" type="submit"
+                                onclick=""><i class="fa fa-check"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

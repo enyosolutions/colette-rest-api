@@ -1,0 +1,177 @@
+{% extends 'Layout/layout-v2.html.twig' %}
+{% block topnav %}
+    {% embed 'common/navTop-v2.html.twig' %}
+        {% block subheader %}
+            <div class="container-fluid">
+
+            </div>
+        {% endblock subheader %}
+    {% endembed %}
+{% endblock topnav %}
+{% set active = 'inspireme' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="/css/search/city-infos.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/inspireme/inspireme.css">
+    <link rel="stylesheet" href="/css/dashboard/bookmark.css">
+{% endblock %}
+{% block content %}
+    {% set img = ((not q is empty) ? ("/data/city/" ~ cities[0].code ~ "/pictures/" ~ (app["mobile_detect"].isMobile()? 'main' : '1920') ~ ".jpg"): '/img/landing/5.jpg') %}
+    <section class="hero small-hero" style="background-image:url({{ img }});">
+        <div class="bg-overlay">
+            <div class="container" style="">
+                <div class="intro-wrap">
+                    <h1 class="intro-title">{{ 'inspireme.page.title' | trans }}</h1>
+
+                    <div class="intro-text">
+                        <div class="taxonomy-description">
+                            <p>{{ 'quotes.travel.%id%' | replace({'%id%':random(1..5)})  | trans }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="main dashboard">
+        <div class="container-fluid">
+            <div class="col-sm-12 home-search-field">
+                <form class="big-search" role="search" method="get"
+                      action="{{ path('destinations.list') }}" _lpchecked="1">
+                    <input type="text"
+                           name="q"
+                           placeholder="{{ 'big.search.placeholder.text' | trans }}"
+                           value="{{ q }}">
+                    <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
+            </div>
+
+            <hr/>
+
+            <h3 class="{% if q is empty %} hidden {% endif %}">{{ 'Places'| trans }}</h3>
+
+            <div class="places" id="inspireMe">
+
+                <div class="row">
+                    <div id="tab-public-bookmarks" >
+                        <h2 class="text-primary">{{ 'dashboard.ideas.list.title' | trans }}</h2>
+                        <br>
+
+                        <div class="container-fluid no-gutter">
+                            <div class="btn btn-group" id="public-bookmark-filters">
+                                <button class="btn btn-primary" data-filter=".bookmark-item"><i
+                                            class='fa fa-bookmark'></i> {{ 'dashboard.travelboard.button.all.label' | trans }}
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary"
+                                            data-filter=".destination"
+                                            aria-expanded="false"
+                                            >{{ 'dashboard.travelboard.button.destinations.label' | trans }}
+                                    </button>
+
+                                </div>
+                                <button class="btn btn-primary"
+                                        data-filter=".tripidea">{{ 'dashboard.travelboard.button.tripideas.label' | trans }}</button>
+                                <button class="btn btn-primary" data-filter=".picture">{{ 'pictures.label' | trans }}</button>
+                                <button class="btn btn-primary" data-filter=".accommodation">{{ 'hotels.label' | trans }}</button>
+                                <button class="btn btn-primary" data-filter=".other">{{ 'other.label' | trans }}</button>
+                                {#
+                                <button class="btn btn-primary" data-filter=".flight">Flights fares</button>
+                                                    <button class="btn btn-primary" data-filter="accommodation">Hotels</button>
+                                                    <button class="btn btn-primary" data-filter="place">Places</button>
+                                                    #}
+                            </div>
+
+                            <button class="btn btn-success pull-right loading-state btn-new-bookmark"><i
+                                        class="fa fa-plus"></i> {{ 'add.bookmark' | trans }}</button>
+
+                            <hr style="margin:3em 0;clear:both;">
+                            <div id="public-bookmarks-block" class="row">
+
+                                {% for bookmark in publicBookmarks %}
+                                    {% set destination = cities[bookmark.item.code] %}
+                                    <div class=" col-xs-12 col-md-3 bookmark-item user-bookmark {{ bookmark.type }} {{ bookmark.tags | join(" ") }}"
+                                         draggable="false">
+                                        {% if bookmark.type == 'destination' %}
+                                            {% include 'Dashboard/Bookmark/destination.html.twig' %}
+
+                                        {% elseif bookmark.type == 'tripidea' %}
+                                             {% include 'Dashboard/Bookmark/tripIdea.html.twig' %}
+
+                                        {% elseif bookmark.type == 'other' %}
+                                            {% include 'Dashboard/Bookmark/other.html.twig' %}
+                                        {% elseif bookmark.type == 'flight' %}
+
+                                        {% endif %}
+                                    </div>
+
+                                {% endfor %}
+                                {% for fare in cheapestFares |slice(0,40) %}
+                                    <div class=" col-xs-12 col-md-3 bookmark-item kwg-bookmark kwg-collection tripidea ">
+                                        {% include 'Dashboard/Bookmark/cheapFare.html.twig' %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <nav id="page_nav">
+                                <a href="{{ path('bookmark.list') }}?page=2&limit=2"></a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ pagination |raw }}
+        </div>
+
+    </section>
+{% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+            <!-- <script src="/js/plugins/bootstrap-typeahead.js"></script> -->
+            <script src="/js/vendor/infinitescroll/jquery.infinitescroll.min.js?v={{ app['assets.js.version'] }}"></script>
+            <script src="/js/vendor/isotope/isotope.pkgd.min.js"></script>
+            <script src="/js/vendor/backbone/backbone-pageable.min.js"></script>
+
+
+    <script>
+var $bookmarksContainer = null;
+        $(function () {
+            $bookmarksContainer = $('#public-bookmarks-block');
+            if (window.analytics) {
+                analytics.page("InspireMe", {q: '{{ q is defined and q is not empty  ? q : 'undefined'}}' });
+            }
+
+            $('#public-bookmark-filters').find('.btn[data-filter]').on('click', function () {
+                console.log($(this).data('filter'));
+                $bookmarksContainer.isotope({filter: $(this).data('filter')});
+            });
+
+
+            $bookmarksContainer.infinitescroll({
+                        navSelector  : '#page_nav',
+                        nextSelector : '#page_nav a',
+                        itemSelector : '.bookmark-item',
+                        dataType: 'json',
+                        appendCallback: false,
+                        debug		 	: false,
+                        loading: {
+                            finishedMsg: 'No more pages to load.',
+                            img: ''
+                        }
+                    },
+                    function(json, opts) {
+                        var $html = '';
+                        json.body.forEach(function(arr) {
+                            var $html = App.Dashboard.views.templates.Bookmark.Other({
+                                bookmark: arr,
+                                loadingImg: false
+                            });
+                            var $html = $($html);
+                            App.Dashboard.views.$publicBookmarksContainer.append($html).isotope('appended', $html);
+                        });
+
+                    }
+            );
+
+        });
+    </script>
+{% endblock %}

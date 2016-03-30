@@ -1,0 +1,62 @@
+{% extends 'layout.html.twig' %}
+{% set active = 'page.contact' %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="/css/pages/pages.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/search/city-infos.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/jquery.panoramio.css">
+    <link rel="stylesheet" href="/css/events.css">
+    {% if  page.code is defined %}
+        <link rel="stylesheet" href="/css/{{ page.code }}.min.css?v={{ app['assets.css.version'] }}">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <article id="cityInfos" class="card cms-page page-body">
+        <h1 class="page-title">{{ city.intl[app.locale].name }} - {{ city.intl[app.locale].country }}</h1>
+        {% set intl = city.intl[app.locale] %}
+        <div class="page-content">{% include 'Search/cityInfos.html.twig' %}</div>
+    </article>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if app.debug %}
+        <!-- <script src="/js/plugins/bootstrap-typeahead.js"></script> -->
+
+    {% else %}
+
+    {% endif %}
+    <script src="/js/common/events.music.js" async="true"></script>
+    <script src="/js/vendor/kenweego/jquery.kwg-carousel.js" async="true"></script>
+    <script>
+        var city = "{{ city.code }}";
+        var evts = {{ events | json_encode | raw }};
+        var pictures = {{ pictures | json_encode | raw}};
+
+        $(function () {
+                if(analytics){
+                    analytics.page("Poll");
+                }
+
+            setTimeout(function() {
+
+                // Update pictures
+                var outerWidth = $(document).outerWidth();
+                var outerHeight = $(document).outerHeight();
+
+                $('#panoCarousel').kcarousel({data: pictures, picsPerSlide: (outerHeight > 600 &&  outerWidth > 600  ?8:undefined), formatter: "panoramio"});
+
+                $('#concertsCarousel').kcarousel({data: Music.format(evts),  formatter: "songkick"});
+            },1000);
+
+        });
+    </script>
+{% endblock %}

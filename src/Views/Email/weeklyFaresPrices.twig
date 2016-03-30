@@ -1,0 +1,179 @@
+{#
+Template for an email message sent to confirm an email address.
+Variables passed to this template:
+    user: The SimpleUser\User instance.
+    confirmationUrl: The link to click to complete the confirmation process.
+#}
+
+
+{%- block subject -%}
+    {% if user.travelProfile.hometown is not empty %}
+        {% set hometown = app['cache.service'].getCity(user.travelProfile.hometown,app.locale) %}
+    {% endif %}
+    {% set title = (not hometown is defined ? ('email.weeklyfares.default.title' |trans({'%date%':(date() |date('d-m-Y'))})) : ('email.weeklyfares.title'|trans({"%origin%": hometown.infos.name}))) %}
+    {{ title }}
+{%- endblock -%}
+
+{# The plain text message. #}
+{%- block body_text -%}{%- autoescape false -%}
+{% if user.travelProfile.hometown is not empty %}
+    {% set hometown = app['cache.service'].getCity(user.travelProfile.hometown,app.locale) %}
+{% endif %}
+{% set title = (user.travelProfile.hometown is empty ? ('email.weeklyfares.default.title' |trans({'%date%':(date() |date('d-m-Y'))})) : ('email.weeklyfares.title'|trans({"%origin%": hometown.infos.name}))) %}
+
+{# The subject line. #}
+{{ title }}
+{%- endautoescape -%}{%- endblock -%}
+
+{# The HTML message. Optional. #}
+{%- block body_html -%}
+    {% if user.travelProfile.hometown is not empty %}
+        {% set hometown = app['cache.service'].getCity(user.travelProfile.hometown,app.locale) %}
+    {% endif %}
+
+    {% set title = (user.travelProfile.hometown is empty ? ('email.weeklyfares.default.title' |trans({'%date%':(date() |date('d-m-Y'))})) : ('email.weeklyfares.title'|trans({"%origin%": hometown.infos.name}))) %}
+    {# The subject line. #}
+    <img src="{{ pixelImg }}"
+         width="1" height="1"
+         style="" border="0"/>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="-moz-font-smoothing: antialiased; -ms-font-smoothing: antialiased; -webkit-font-smoothing: antialiased
+sed; -moz-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; width: 100%;">
+        <tr>
+            <td style="padding: 10px 0 30px 0;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%"
+                       style="border: 1px solid #cccccc; border-collapse: collapse;border-radius:4px">
+                    <tr>
+                        <td align="center" bgcolor="#ff584B"
+                            style="padding: 20px 0 20px 0; color: #333333; font-size: 28px; font-weight: bold; font-family: sans-serif, tahoma;">
+                            <center>
+                                <img src="https://kenweego.com/img/logo-white.jpg" alt="Kenweego" width="160"
+                                     height="90"
+                                     style="display: block;"/>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #555; font-weight:bold;text-transform:uppercase; font-family: sans-serif; font-size: 26px;">
+                                        <b>{{ title }}</b>
+                                        <br/><br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: #555555; font-family: sans-serif; font-size: 20px;">
+                                        <b>Hello {{ user.firstname }},</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 30px 0 5px 0; color: #666; font-family: sans-serif; font-size: 17px; line-height: 1.5;">
+                                        {{ 'email.weeklyfares.introtext' |trans |raw }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    {% if user.travelProfile.hometown is empty %}
+                                        <td style="padding: 5px 0 10px 0; color: #666; font-family: sans-serif; font-size: 17px; line-height: 1.5;">
+                                            {{ 'email.weeklyfares.missing.hometown' |trans |raw }}
+                                        </td>
+                                    {% else %}
+                                        <td style="padding: 20px 0 30px 0; color: #666; font-family: sans-serif; font-size: 17px; line-height: 1.5;">
+                                            {{ 'email.weeklyfares.missing.favorites' |trans |raw }}
+                                        </td>
+                                    {% endif %}
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <hr>
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                            <tbody>
+                                            {% for item in cheapestFares |slice(0,8) %}
+                                                {% include 'Email/destinationCard.part.twig' %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                        <br/>
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%" >
+                                            <tbody style="box-shadow: 0 0 3px #999;">
+                                            {% for item in cheapestFares |slice(8,12) %}
+                                                {% include 'Email/destinationLine.part.twig' %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor=""
+                                        style="">
+                                        &nbsp;
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td bgcolor=""
+                                        style="padding:10px; border:1px solid #999; color: #ff584B; text-align:center;font-family: sans-serif; font-size: 16px; line-height: 20px;border-radius:4px;">
+                                        {{ 'email.weeklyfares.disclaimer' | trans | raw }}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td bgcolor=""
+                                        style="">
+                                        &nbsp;
+                                        <br><br><br>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#eee"
+                                        style="padding:10px; border:1px solid #999; color: #555; font-family: sans-serif; font-size: 16px; line-height: 20px;border-radius:4px;">
+                                        {{ 'email.weeklyfares.footer' | trans | raw }}
+
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td bgcolor="#ff584B" style="padding: 30px 30px 30px 30px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="color: #333; font-family: sans-serif; font-size: 14px;" width="75%">
+                                        &reg; Kenweego, 2015 - <span
+                                                style="color: #fff;"> {{ 'email.weeklyfares.share' |trans }}</span>
+                                    </td>
+                                    <td align="right" width="25%">
+                                        <table border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.twitter.com/kenweego{{ locale =='FR'?'FR':'EN' }}"
+                                                       style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Twitter.png"
+                                                             alt="Twitter" width="38" height="38"
+                                                             style="display: block;" border="0"/>
+                                                    </a>
+                                                </td>
+                                                <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
+                                                <td style="font-family: sans-serif; font-size: 12px; font-weight: bold;">
+                                                    <a href="http://www.facebook.com/kenweego{{ locale =='FR'? 'voyages' :'travels' }}"
+                                                       style="color: #ffffff;">
+                                                        <img src="http://blog.kenweego.com/wp-content/share_icons/Facebook.png"
+                                                             alt="Facebook" width="38" height="38"
+                                                             style="display: block;" border="0"/>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+{%- endblock -%}

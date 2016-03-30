@@ -1,0 +1,48 @@
+<div class="action-icons-block fade">
+    <share-button class="share-button" data-url="{{ (not bookmark.url is empty) ? shareUrl :  bookmark.url }}"
+                  data-toggle="tooltip"
+                  title="{{ 'label.share'|trans }}"></share-button>
+    {% if bookmark.ownerId == app.user.id %}
+        <div class="dropdown">
+            <button class="btn btn-default btn-icon dropdown-toggle" type="button" data-toggle="dropdown">
+                <i class="fa {{ (bookmark.visibility == "public" )?  "fa-globe" : (bookmark.visibility == "friends" ? "fa-users" :"fa-eye-slash") }} text-primary"
+                   data-toggle="tooltip"
+                   title="{{ ("dashboard.bookmark.visibility." ~ bookmark.visibility ~ '.label')| trans }}"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="btn-visibility"
+                       data-kwg-visibility="private" data-kwg-type="{{ bookmark.type }}"
+                       data-kwg-id="{{ bookmark._id }}" data-toggle="tooltip" data-placement="left"
+                       title="{{ "dashboard.bookmark.button.make.private.label" | trans }}"
+                       data-kwg-track-click="Changed BookmarkVisibility"
+                       data-kwg-track-props-visibility="private"
+                            >
+                        <i class="fa fa-eye-slash text-primary"
+                                ></i> {{ "dashboard.bookmark.button.make.private.label" | trans }}
+                    </a></li>
+                <li><a href="#" class="btn-visibility"
+                       data-kwg-visibility="friends" data-kwg-type="{{ bookmark.type }}"
+                       data-kwg-id="{{ bookmark._id }}" data-toggle="tooltip" data-placement="left"
+                       title="{{ "dashboard.bookmark.button.make.private.label" | trans }}"
+                       data-kwg-track-click="Changed BookmarkVisibility"
+                       data-kwg-track-props-visibility="friends"
+                            ><i class="fa fa-users text-primary"
+                                ></i> {{ "dashboard.bookmark.button.make.friends.label" | trans }}</a></li>
+                <li><a href="#" class="btn-visibility"
+                       data-kwg-visibility="public" data-kwg-type="{{ bookmark.type }}"
+                       data-kwg-id="{{ bookmark._id }}" data-toggle="tooltip" data-placement="left"
+                       title="{{ "dashboard.bookmark.button.make.public.label" | trans }}"
+                       data-kwg-track-click="Changed BookmarkVisibility"
+                       data-kwg-track-props-visibility="public"
+                            ><i class="fa fa-globe text-primary"
+                                ></i> {{ "dashboard.bookmark.button.make.public.label" | trans }}</a></li>
+            </ul>
+        </div>
+        <i class="btn-trash fa fa-trash-o text-primary" data-toggle="tooltip" title="{{ 'label.delete'|trans }}"></i>
+    {% else %}
+        <button class="btn-copy-bookmark btn-icon">
+            <i class=" fa fa-floppy-o text-primary" data-kwg-type="{{ bookmark.type }}"
+               data-toggle="tooltip" title=""></i>
+        </button>
+    {% endif %}
+</div>

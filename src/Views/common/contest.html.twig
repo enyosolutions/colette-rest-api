@@ -1,0 +1,350 @@
+<link rel="stylesheet" href="/css/common/contest.css">
+<div id="contest-modal" class="modal modal-xl fade" data-backdrop="static" >
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" style="">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <div role="tabpanel" class="tabpanel">
+                    <form action="{{ path('user.newsletter.register') }}" method="post" id="contest-popup-form">
+                        <ul class="nav nav-tabs" role="tablist" style="display:none">
+                            <li role="presentation"><a href="#step1" aria-controls="profile" role="tab"
+                                                       data-toggle="tab"></a></li>
+                            <li role="presentation"><a href="#step2" aria-controls="messages" role="tab"
+                                                       data-toggle="tab"></a></li>
+                            <li role="presentation"><a href="#step3" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"></a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane item fade in " id="step1">
+                                <div class="step">
+                                    <img src="/img/contest/p2.jpg" class="background">
+
+                                    <div class="content card">
+
+                                        <div class="contest-title">{{ 'contest.title' | trans }}</div>
+                                        <div class="step-title">{{ 'contest.step2.title' | trans }}</div>
+                                        <div class="action contest-city">
+                                            <div class="form form-group">
+                                                <input type="text" class=" form-control material-input " name="user[guessedCity]"
+                                                       id="contest-city-id" placeholder="{{ 'contest.guess.placeholder' | trans }}" />
+                                                <button type="button" class="btn btn-primary btn-fab btn-fab-mini btn-fab-success submit"
+                                                        id="contestCitySubmit">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane item fade" id="step2">
+                                <div class="step">
+                                    <img src="/img/contest/p3.jpg" class="background">
+
+                                    <div class="content card">
+                                        <div class="contest-title">{{ 'contest.title' | trans }}</div>
+                                        <div class="step-title">{{ 'contest.step3.title' | trans }}</div>
+                                        <div class="action" id="yourDetails">
+                                                <div class="form-group form-group-material validate">
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                                                        <input type="text"
+                                                               class="form-control material-input "
+                                                               id="contest-name-id"
+                                                               name="user[name]"
+                                                               placeholder="{{ 'Your name'| trans }}"
+                                                               data-minLength="2"
+                                                               autocomplete="off"
+                                                               value=""
+                                                               required
+                                                                >
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-envelope-o"></i>
+                                                        </div>
+                                                        <input type="email"
+                                                               class="form-control material-input "
+                                                               id="contest-email-id"
+                                                               name="user[email]"
+                                                               placeholder="{{ 'Your email address'| trans }}"
+                                                               data-minLength="2"
+                                                               autocomplete="off"
+                                                               value=""
+                                                               required
+                                                                >
+
+                                                    </div>
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-info-circle"></i>
+                                                        </div>
+                                                        <select class="results-filter select form-control material-input"
+                                                                id="contest-age-id"
+                                                                name="user[age]"
+                                                                data-size="auto"
+                                                                title="{{ 'your.age' | trans }}"
+                                                                >
+                                                            <option data-hidden="true">{{ 'your.age' | trans }}</option>
+                                                            <option value="0_2">0 - 17</option>
+                                                            <option value="3_5">18 - 24</option>
+                                                            <option value="5_x">25 - 30</option>
+                                                            <option value="5_x">31 - 35</option>
+                                                            <option value="5_x">36 - 40</option>
+                                                            <option value="5_x"> + 40 </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="input-group">
+                                                        <div class="input-group-addon"><i class="fa fa-info-circle"></i></div>
+                                                        <select class="results-filter select form-control material-input"
+                                                                id="contest-travelcount-id"
+                                                                name="user[travelCount]"
+                                                                data-size="auto"
+                                                                placeholder="{{ 'how.many.times.travel' | trans }}"
+                                                                title="{{ 'how.many.times.travel' | trans }}"
+                                                                >
+                                                            <option data-hidden="true">{{ 'how.many.times.travel' | trans }}</option>
+                                                            <option value="0_2">0 - 2 {{ 'times' | trans }}</option>
+                                                            <option value="3_5">3 - 5 {{ 'times' | trans }}</option>
+                                                            <option value="5_x">{{ 'more.than' | trans }}
+                                                                5 {{ 'times' | trans }}</option>
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            <button type="button" class="btn btn-primary btn-fab btn-fab-mini btn-fab-success submit pull-right"><i class="fa fa-check"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane item fade" id="step3">
+                                <div class="step">
+                                    <img src="/img/contest/p4.jpg" class="background">
+
+                                    <div class="content card">
+                                        <div class="contest-title">{{ 'contest.title' | trans }}</div>
+                                        <div class="step-title">{{ 'contest.step4.title' | trans }}</div>
+                                        <br/>
+                                       <div class="text-primary step-title">{{ 'contest.final.text' | trans }}</div>
+                                        <div class="action" id="share">
+                                            {% set shareTitle = 'contest.share.title' | trans  ~ app.url %}
+                                            {% set shareLink = app.url %}
+
+                                            {% if shareTitle is not defined or shareTitle is null%}
+                                                {% if seo is defined %}
+                                                    {%  set shareTitle =  seo.title %}
+                                                {% else %}
+                                                    {%  set shareTitle =  'default.seo.title' |trans ~ app.url %}
+                                                {% endif %}
+                                            {% endif %}
+                                            <br/>
+
+                                            <ul class="share-buttons">
+                                                <li><a href="https://www.facebook.com/sharer/sharer.php?t={{ shareTitle }}&u={{shareLink}}" target="_blank"><img src="/img/share_icons/Facebook.png"></a></li>
+                                                <li><a href="https://twitter.com/intent/tweet?source=kenweego.com&text={{ shareTitle }}:%20{{shareLink}} &via=kenweego{{ app.locale }}" target="_blank" title="Tweet"><img src="/img/share_icons/Twitter.png"></a></li>
+                                                <li><a href="https://plus.google.com/share?url={{shareLink}}" target="_blank" title="Share on Google+"><img src="/img/share_icons/Google+.png"></a></li>
+                                                <li><a href="mailto:?subject={{ shareTitle }}&body={{shareLink}}" target="_blank" title="Email"><img src="/img/share_icons/Email.png"></a></li>
+                                            </ul>
+                                            <br/>
+                                            {{ 'contest.step3.subtext' | trans }}
+                                            <div class="fb-button-container">
+                                                <div class="like-button">
+                                                    <div id="fb-root">
+                                                        <div class="fb-like"
+                                                             data-href="https://www.facebook.com/kenweego"
+                                                             data-layout="box_count"
+                                                             data-width="50%"
+                                                             data-action="like" data-show-faces="true"
+                                                             data-share="false"></div>
+                                                    </div>
+                                                </div>
+
+                                                {#
+                                                <div class="share-button">
+                                                    <button class="btn btn-primary color-facebook"
+                                                            onclick="shareFbPage()">{{ 'share' | trans }}
+                                                    </button>
+                                                </div>
+                                                #}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+</div>
+<style>
+    #fb-root {
+        position: relative;
+        left: 10%;
+    }
+</style>
+<script>
+
+    var Contest = {startContest: undefined, currStep: 1, totalSteps: 3, $carousel: undefined, nextStep: undefined} ;
+    var fbTries = 0;
+    var rollerHandle;
+
+    $(function () {
+
+
+
+
+       // $('#contest-modal').find('.roller').ticker({speed: 15});
+
+        Contest.$tabs = $('#contest-modal').find('.tabpanel');
+
+        Contest.$tabs.find('.nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
+        Contest.$tabs.find('#step1 .submit').on('click',guessCity);
+        Contest.$tabs.find('#step2 .submit').on('click',subscribe);
+
+        $('.contest-trigger').on('click', function (evt) {
+            $("#contest-modal").modal();
+            $.cookie("kwg.users.contest.optin", 0, {path: '/'});
+            Contest.startContest();
+            //switchLikeShareButtons();
+            return false;
+        });
+
+
+    });
+
+    Contest.nextStep = function () {
+        Contest.$tabs.find(' li:eq(' + (Contest.currStep++) + ') a').tab('show');
+    }
+
+    Contest.startContest = function () {
+        /*
+        rollerHandle = setInterval(function () {
+            console.log('click');
+            $('#contest-modal').find('.roller' + Math.floor((Math.random() * 5) + 1)).click();
+        }, 1500);
+        */
+
+        Contest.currStepv = 0;
+
+        if(analytics){
+            analytics.track('Started contest 1');
+        }
+        Contest.$tabs.find(' li:first a').tab('show');
+    }
+
+    function shareFbPage() {
+        FB.ui({
+            method: 'share',
+            display: "popup",
+            href: 'http://www.kenweego.com/' + Site.locale
+        }, function (response) {
+            console.log(response);
+            if (response && !response.error_code) {
+                console.log(response);
+                Contest.nextStep();
+            }
+            else {
+                if(fbTries < 2) {
+                    $('#submit-error').remove(),
+                    $('#step1').find('.content').append("<span class='alert text-danger' id='submit-error'>" + _t('facebook.share.error') + "</span>");
+                    fbTries++;
+                }
+                else{
+                    fbTries = 0;
+                    Contest.nextStep();
+                }
+
+            }
+        });
+
+    }
+
+    function guessCity(evt) {
+        if( $("#contest-city-id").val()){
+            Contest.nextStep();
+            clearInterval(rollerHandle);
+        }
+        else{
+            $("#contest-city-id").css("border", "2px solid red");
+            $("#contest-city-id").css("background-color", "#dddddd");
+        }
+
+    }
+
+
+    function subscribe(evt) {
+        var $target = $("#contest-popup-form");
+        var email = $("#contest-email-id").val();
+        var name = $("#contest-name-id").val();
+        var age = $("#contest-age-id").val();
+        var city = $("#contest-city-id").val();
+        var travelCount = $("#contest-travelcount-id").val();
+
+        if (Mail.validateEmail(email) && name && name.length > 0 && travelCount && travelCount.length != undefined ) {
+            $.ajax($target.attr('action'),
+                    {
+                        method: $target.attr('method'),
+                        data: {
+                            user: {
+                                email: email,
+                                name: name,
+                                lang: Site.locale,
+                                guessedCity: city,
+                                travelCount: travelCount,
+                                age: age,
+                                source: "contest.win.ticket.1",
+                                location: localStorage.getCacheItem('kwg.user.location')
+                            }
+                        },
+
+                        success: function (data) {
+                            console.log(data);
+                            if(!data.error){
+                                Contest.nextStep();
+                                $.cookie("kwg.users.prospect.optin", 1, {path: '/'});
+                                $.cookie("kwg.users.contest.optin", 1, {path: '/'});
+                            }
+                            else
+                            {
+                                if(fbTries < 2) {
+                                    $('#submit-error').remove();
+                                    $('#step2').find('.content').append("<span class='alert danger' id='submit-error'>" + _t('error.registering.mail') + "</span>");
+                                    fbTries++;
+                                }
+                                else{
+                                    fbTries = 0;
+                                    Contest.nextStep();
+                                }
+                            }
+                        }
+                    }
+            );
+
+            if (analytics) {
+                analytics.identify(email);
+                analytics.track('Submitted contest');
+            }
+        }
+        else {
+            $("#contest-email-id").css('border', '3px dotted red');
+            $("#contest-name-id").css('border', '3px dotted red');
+            $("#contest-travelcount-id").css('border', '3px dotted red');
+        }
+
+        return false;
+    }
+
+</script>
+
+
+
+

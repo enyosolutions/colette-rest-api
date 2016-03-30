@@ -1,0 +1,148 @@
+{% extends 'Admin/admin.layout.html.twig' %}
+{% set active = 'homepage' %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+        <link rel="stylesheet" href="/css/bg.css?v={{ app['assets.css.version'] }}">
+        <link rel="stylesheet" href="/css/AdminLTE.css?v={{ app['assets.css.version'] }}">
+    <link rel="stylesheet" href="/css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+{% endblock %}
+
+
+{% block content %}
+
+
+    <div>
+
+        <h2>Viewing {{ collectionName }} : {{ singleItem.name }}</h2>
+
+            <div class="btn-group" style="">
+                <a href="{{ path('admin_crud_list', {'collectionName': collectionName}) }}" class="btn btn-app" type="button"><i class="fa fa-reply"></i>Back</a>
+                <a class="btn btn-app" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: singleItem._id }) }}"><i class="fa fa-save"></i>Modify</a>
+            </div>
+            <div class="box-body">
+                {% import 'Admin/json.schema.view.macro.html.twig' as macro %}
+                {{ macro.json_form(schema.properties, schema.required, singleItem,'_'~collectionName, 5) }}
+            </div>
+
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+            </div>
+
+        <div id="editor_holder">
+
+        </div>
+
+    </div>
+{% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script src="/js/libs/jsoneditor.min.js"></script>
+
+        <script src="/js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+        <script src='/js/libs/wikipedia.js'></script>
+        <script>
+            $(function () {
+                $(".tags, .sights").tagsinput({
+                            tagClass: function (item) {
+
+                                var rand = Math.round(Math.random() * 10);
+                                console.log(rand);
+
+                                switch (rand) {
+                                    case 1   :
+                                        return 'label label-lime';
+                                    case 2  :
+                                        return 'label label-danger label-important';
+                                    case 3:
+                                        return 'label label-success';
+                                    case 4   :
+                                        return 'label label-default';
+                                    case 5     :
+                                        return 'label label-info';
+                                    default:
+                                    case 6     :
+                                        return 'label label-material-teal';
+                                    case 7     :
+                                        return 'label label-material-purple';
+                                    case 8     :
+                                        return 'label label-material-yellow';
+                                    case 9     :
+                                        return 'label label-material-brown';
+                                    case 10     :
+                                        return 'label label-material-amber';
+                                }
+                            }
+                        }
+                );
+
+                $('.shortDescription').each(function() {
+                    switchToTextarea(this).wysihtml5();
+                });
+
+               // loadWikipediaData($('.shortDescription.en'),'en');
+               // loadWikipediaData($('.shortDescription.fr'),'fr');
+
+
+            });
+
+            $(".tags").after("<br/>" +
+            "<small>Free field, small case only, avoid space and funny characters(- and _ are ok). the comma(,) is a separator that create a new tag.  </small>");
+            $(".tags").after("<br/>" +
+            "<small>Tags currently in use in the search Engine : beach, sun , romance , shopping, party, food, culture , nature, " +
+            "bigcity, medium city, smallcity, capital</small>"
+            +
+            "<br/><small>Tags for budget : lowbudget, mediumbudget, highbudget </small>");
+            var element = document.getElementById('editor_holder');
+            /*
+             var editor = new JSONEditor(element,
+             {
+             theme: 'bootstrap3',
+             schema: ...,
+             form_name_root: 'city',
+             iconlib: 'fontawesome4',
+
+             }
+             );
+             */
+
+
+            function switchToTextarea(elm) {
+                var textbox = $(elm);
+                var textarea = $("<textarea></textarea>");
+                textarea.val(textbox.val());
+                textarea.attr('name', textbox.attr('name'));
+                textarea.attr('id', textbox.attr('id'));
+                textarea.attr('class', textbox.attr('class'));
+                textarea.attr('cols',"95");
+                textarea.attr('rows',"10");
+                textarea.attr('id', textbox.attr('id'));
+                //Replace textbox with textarea
+                textbox = textbox.replaceWith(textarea);
+                return textarea;
+            }
+
+            function loadWikipediaData(tag, lang){
+                var $inputText = $(tag);
+
+                if ($inputText.val() == ""){
+                    console.log(lang);
+                    WIKIPEDIA.getData('http://'+lang+'.wikipedia.org/wiki/'+ $(".name."+lang).val(), function(info){
+
+                        console.log( $(".name."+lang).val());
+                        console.log(info);
+                        $inputText.val(info.summary.description);
+                    });
+
+                }
+                return $inputText;
+
+            }
+
+
+        </script>
+    {% endblock %}

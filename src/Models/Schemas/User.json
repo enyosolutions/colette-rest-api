@@ -1,0 +1,61 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/User",
+    "type": "object",
+    "properties": {
+        "firstname": {
+            "id": "firstname",
+            "type": "string"
+        },
+        "lastname": {
+            "id": "lastname",
+            "type": "string"
+        },
+        "avatar": {
+            "id": "avatar",
+            "type": "string"
+        },
+        "email": {
+            "id": "email",
+            "type": "string"
+        },
+        "password": {
+            "id": "password",
+            "type": "string"
+        },
+        "salt": {
+            "id": "salt",
+            "type": "string"
+        },
+        "token": {
+            "id": "token",
+            "type": "string"
+        },
+        "createdAt": {
+            "id": "createdAt",
+            "type": "number"
+        },
+        "lastModifiedAt": {
+            "id": "lastModifiedAt",
+            "type": "number"
+        },
+        "roles": {
+            "id": "roles",
+            "type": "array",
+            "minItems": 0,
+            "uniqueItems": true,
+            "additionalItems": true,
+            "items": {
+                "id": "0",
+                "type": "string"
+            }
+        }
+    },
+    "required": [
+        "firstname",
+        "lastname",
+        "email",
+        "password",
+        "createdAt"
+    ]
+}

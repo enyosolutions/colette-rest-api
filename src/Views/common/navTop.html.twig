@@ -1,0 +1,252 @@
+{% set siteRootUrl = (absoluteurls or type == 'blog' or type == 'iframe' )? app.request.scheme ~ '://'~app.request.host : '' %}
+{% if type == 'standalone' %}
+    <link rel="stylesheet" href="{{ siteRootUrl }}/css/layout.min.css?{{ app['assets.css.version'] }}">
+    <script src="{{ siteRootUrl }}/js/vendor/jquery/jquery.1.11.min.js"></script>
+    <script src="{{ siteRootUrl }}/js/vendor/bootstrap/bootstrap.min.js"></script>
+{% endif %}
+
+<nav class="navbar navbar-default navbar-top" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+    {% if type != 'standalone' %}
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+    {% endif %}
+    <a class="navbar-brand" href="{{ app.request.getSchemeAndHttpHost() }}"><img
+                src="{{ app.request.getSchemeAndHttpHost() }}/img/logo_small_r.png" alt="Kenweego"
+                width="120" height="56"/><span class="subtext">Beta</span></a>
+</div>
+<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<ul class="nav navbar-nav navbar-right">
+<li><a class="news-link" data-kwg-track-click="Clicked NavMenu" data-kwg-track-props-via="header"
+       data-kwg-track-props-menu="home"
+       href="{{ siteRootUrl }}/{{ app.locale }}/">{{ 'nav.menu.label.home' | trans }}</a>
+<li><a class="news-link" href="{{ app.request.getSchemeAndHttpHost() }}{{ path('flightslanding') }}"
+       data-kwg-track-click="Clicked NavMenu"
+       data-kwg-track-props-via="header"
+       data-kwg-track-props-menu="transport"
+            >{{ 'nav.menu.label.flight' | trans }}</a></li>
+<li><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+       data-kwg-track-props-via="header"
+       data-kwg-track-props-menu="accommodation"
+       href="http://hotels.kenweego.com?languageCode={{ app.locale }}&currencyCode={{ app.currency.code }}&brandId=432483&a_aid=143679">{{ 'nav.menu.label.accommodation' | trans }}</a>
+</li>
+<li class="dropdown"><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+                        data-kwg-track-props-menu="destinations"
+                        data-kwg-track-props-via="header"
+                        href="{{ siteRootUrl }}{{ path('discover.inspire_me') }}"
+                        data-target="#" class="dropdown-toggle"
+                        data-toggle="dropdown"
+            >{{ 'nav.menu.label.destinations' | trans }} <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        <li><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="destination"
+               data-kwg-track-props-destination="search"
+               href="{{ siteRootUrl }}{{ path('destinations.list') }}"><i
+                        class="fa fa-search"></i> {{ 'search.label' |trans }}</a></li>
+        <li role="separator" class="divider"></li>
+
+        <li><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="destination"
+               data-kwg-track-props-destination="popular"
+               href="{{ siteRootUrl }}{{ path('destinations.list',{q:'major'}) }}"><i
+                        class="fa fa-users"></i> {{ 'popular.label' |trans }}</a></li>
+        <li><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="destination"
+               data-kwg-track-props-destination="all"
+               href="{{ siteRootUrl }}{{ path('destinations.list') }}"><i
+                        class="fa fa-globe"></i> {{ 'all.destinations.label' |trans }}</a></li>
+        <li role="separator" class="divider"></li>
+
+        {% for dest in app.session.get('sidebarCities') %}
+            <li>
+                <a class="news-link" data-kwg-track-click="Clicked NavMenu"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="destination"
+                   data-kwg-track-props-destination="{{ dest.code }}"
+                   href="{{ siteRootUrl }}{{ path('destination.city',{city: dest.code}) }}
+                        ">{{ dest.intl[app.locale].name }}</a>
+            </li>
+        {% endfor %}
+
+    </ul>
+</li>
+{#  <li><a data-toggle="modal" class="contact-link" data-target="#contact-modal" href="javascript:void(0)" hreflang="{{ app.locale }}" >Contact</a></li> #}
+<li class="dropdown"><a class="contact-link"
+                        data-kwg-track-click="Clicked NavMenu"
+                        data-kwg-track-props-via="header"
+                        data-kwg-track-props-menu="contact"
+                        hreflang="{{ app.locale }}" data-target="#" class="dropdown-toggle"
+                        data-toggle="dropdown">{{ 'Contact' | trans }} <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+        {#<li><a class="contact-link" href="http://{{ app.request.host }}{{path("about_page_"~app.locale) }}"
+               hreflang="{{ app.locale }}">{{ 'about.us' | trans }}</a></li>
+               #}
+        <li><a class="news-link" data-kwg-track-click="Clicked NavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="news"
+               href="http://blog.kenweego.com/{{ app.locale }}/">{{ 'menu.news' | trans }}</a>
+        <li><a class="contact-link"
+               data-kwg-track-click="Clicked SubnavMenu"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="about"
+               href="{{ app.request.getSchemeAndHttpHost() }}{{ path('about_page_'~ app.locale) }}"
+               hreflang="{{ app.locale }}">{{ 'about.page.link' | trans }}</a></li>
+        <li><a class="contact-link" data-kwg-track-click="Clicked SubnavMenu"
+               data-kwg-track-props-menu="contact"
+               href="{{ app.request.getSchemeAndHttpHost() }}{{ path('page.contact') }}"
+               hreflang="{{ app.locale }}">{{ 'Contact' | trans }}</a></li>
+    </ul>
+</li>
+<li class="dropdown locale-choice">
+    <a data-kwg-track-click="Clicked NavMenu"
+       data-kwg-track-props-via="header"
+       data-kwg-track-props-menu="locale"
+       href="" data-target="#" class="dropdown-toggle" data-toggle="dropdown"
+            ><img
+                src="{{ app.request.getSchemeAndHttpHost() }}/img/flags/{{ app.locale }}.png"
+                alt="[{{ app.locale }}]"
+                /> - <b>{{ app.currency.code }}</b> <b class="caret"></b></a>
+    <ul class="dropdown-menu center">
+        {#<li><a class="contact-link" href="{{ app.request.getSchemeAndHttpHost() }}{{path("about_page_"~app.locale) }}"
+               hreflang="{{ app.locale }}">{{ 'about.us' | trans }}</a></li>
+               #}
+        <li class="dropdown-header">{{ 'language'| trans }}</li>
+        {% for locale in ['en', 'es', 'fr'] %}
+            <li value="{{ locale }}">
+                {% set params = app.request.get('_route_params')|merge({'_locale': locale}) %}
+                <a data-kwg-track-click="Clicked SubnavMenu"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="locale"
+                   data-kwg-track-props-lang="{{ locale }}"
+                        {% if not app.request.get('_route') is empty %}
+                            href="{{ app.request.getSchemeAndHttpHost() }}{{ path(app.request.get('_route'), params) }}"
+                        {% else %}
+                            href="{{ app.request.getSchemeAndHttpHost() }}/switch_locale/{{ locale }}"
+                        {% endif %}
+                        ><img
+                            src="{{ app.request.getSchemeAndHttpHost() }}/img/flags/{{ locale }}.png"
+                            alt="[{{ locale }}]"
+                            /> - {{ ('locale_name_' ~ locale ) | trans }}</a>
+            </li>
+        {% endfor %}
+        <li class="divider"></li>
+        <li class="dropdown-header">{{ 'currency'| trans }}</li>
+        {% for cur in ['EUR', 'GBP', 'USD'] %}
+            <li value="{{ cur }}">
+                <a data-kwg-track-click="Clicked SubnavMenu"
+                   data-kwg-track-props-currency="{{ cur }}"
+                   data-kwg-track-props-menu="currency"
+                   data-kwg-track-props-via="header"
+                   href="{{ app.request.getSchemeAndHttpHost() }}/switch_currency/{{ cur }}"
+                        ><i class="fa fa-{{ cur | lower }} text-darkgray"></i> - {{ cur }}</a>
+            </li>
+        {% endfor %}
+        {#
+            <select class=" select form-control material-input" id="currency" name="currency"
+                    placeholder="{{ 'adults' | trans }}"
+                    data-size="auto"
+                    >
+                {% for locale in ['EUR', 'GBP', 'USD'] %}
+                    <option value="{{ locale }}" {% if locale == app.currency %}selected {% endif %}>
+                        <a href="{{ app.request.getSchemeAndHttpHost() }}/switch/{{ locale }}"></a>
+                    </option>
+                {% endfor %}
+            </select>
+        #}
+    </ul>
+
+</li>
+<li class="dropdown user-account-choice">{% spaceless %}
+        {% if app.user %}
+            <a href="#" data-target="#" class="dropdown-toggle"
+               data-toggle="dropdown"><img class='avatar' src="{{ app.user.avatar }}"/> {{ app.user.firstname }}
+                <b
+                        class="caret"></b></a>
+        {% else %}
+            <a href="#" data-target="#"
+               class="dropdown-toggle"
+               data-kwg-track-click="Clicked SubNavMenu | Clicked Signin"
+               data-kwg-track-props-via="header"
+               data-kwg-track-props-menu="signin"
+               data-toggle="dropdown"><i class="fa fa-sign-in"></i> {{ 'signin.button.label' | trans }}
+                <b class="caret"></b></a>
+        {% endif %}
+    {% endspaceless %}
+    <ul class="dropdown-menu">
+        {% if app.user %}
+            <li class="">
+                <a data-kwg-track-click="Clicked SubnavMenu"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="dashboard"
+                   href="{{ path('user_dashboard_index') }}"><i
+                            class="fa fa-dashboard"></i> {{ 'nav.menu.label.dashboard' | trans }}</a>
+            </li>
+            <li class="">
+                <a data-kwg-track-click="Clicked SubnavMenu | Clicked Signup"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="settings"
+                   onclick="javascript:App.User.views.showEditPopup()"><i
+                            class="fa fa-cog"></i> {{ 'nav.menu.label.settings' | trans }}</a>
+            </li>
+            <li class="">
+                <a data-kwg-track-click="Clicked SubnavMenu"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="logout"
+                   href="{{ path('user.logout') }}"><i class="fa fa-sign-out"></i> {{ 'user.logout' | trans }}
+                </a>
+            </li>
+        {% else %}
+            <li class="">
+                <a href="#"
+                   data-kwg-track-click="Clicked SubnavMenu | Clicked Signin"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="signin"
+                   onclick="javascript:App.User.views.showLoginPopup()"><i
+                            class="fa fa-sign-in"></i> {{ 'signin.button.label' | trans }}</a>
+            </li>
+            <li class="">
+                <a data-kwg-track-click="Clicked SubnavMenu | Clicked Signup"
+                   data-kwg-track-props-via="header"
+                   data-kwg-track-props-menu="signup"
+                   onclick="javascript:App.User.views.showRegisterPopup()"><i
+                            class="fa fa-user-plus"></i> {{ 'signup.button.label' | trans }}</a>
+            </li>
+            {#
+          <li class="">
+              <a href="http://www.kenweego.com/why-sign-in"><i
+                          class="fa fa-login"></i> {{ 'Why sign in' | trans }}</a>
+          </li>
+          #}
+
+        {% endif %}
+    </ul>
+</li>
+<li class="social-link"><a data-kwg-track-click="Clicked NavMenu"
+                           data-kwg-track-props-via="header"
+                           data-kwg-track-props-menu="facebook"
+                           href="http://www.facebook.com/kenweego{{ (app.locale == 'fr' ) ? "voyages" : "travels" }}"><i
+                class="fa fa-facebook color-facebook"></i></a></li>
+<li class="social-link"><a data-kwg-track-click="Clicked NavMenu"
+                           data-kwg-track-props-via="header"
+                           data-kwg-track-props-menu="twitter"
+                           href="https://twitter.com/kenweego{{ app.locale | upper }}"><i
+                class="fa fa-twitter color-twitter"></i></a>
+</li>
+{# <li><a href="http://www.facebook.com/kenweego" ><i class="fa fa-google-plus"></i></a></li> #}
+<!--<li class="social-link"><a data-kwg-track-click="Clicked InstagramNavMenu" data-kwg-track-props-via="header" data-kwg-track-props-menu="instagram" href="http://www.instagram.com/kenweego"><i class="fa fa-instagram"></i></a></li>-->
+</ul>
+</div>
+</div>
+</nav>
+{% block subheader %}
+    {% include 'Search/actionbar.html.twig' %}
+{% endblock %}

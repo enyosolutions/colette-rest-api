@@ -1,0 +1,153 @@
+{% macro json_form(json, required, json_values, root, depth, parent) %}
+    {% import _self as macros %}
+    {% if depth > 0 %}
+        {% for key, field in json %}
+            {% if field.type is not defined or (field.type != "object" and field.type != "array") %}
+                <div class="form-group">
+                    <label for="field_{{ depth ~ '_' ~key }}">{{ key }} </label><br>
+                    {% if json_values is not null and json_values[key] is defined %}
+                        {% set objet = json_values[key] %}
+                    {% else %}
+                        {% set objet = "" %}
+                    {% endif %}
+                    <input type="{% if field.type == 'boolean' %}checkbox{% else %}text {% endif %}"
+                           class="form-control {{ parent }} {{ key }}"
+                           id="field_{{root ~ '_' ~ depth ~ '_' ~ key }}"
+                           name="{{ root  ~  '[' ~ key  ~ ']' }}"
+                           placeholder="{{ key }}" value="{{ objet }}"
+                            {% if key in required %}  required="required" {% endif %}
+                            {% if field.type == 'boolean' and objet != "" %}checked{% endif %}
+                            />
+                </div>
+            {% elseif field.type == 'object' %}
+                <div class="col-md-offset-1 col-md-10 clearfix">
+                {% if field.id == 'intl' %}
+                    <div class="box box-primary row ">
+                    <div class="box-header"><h2>{{ key }}</h2></div>
+                    <div class="box-body clearfix {{ key }}-panel">
+                    {# Si le type est intl on génère des onglets#}
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        {% for idx, elm in field.properties %}
+                            <li role="presentation"
+                                class="in {% if loop.first %} in active {% endif %}">
+                                <a href="#tab_{{ field.id ~'_' ~ depth ~'_' ~idx }}" aria-controls="home" role="tab"
+                                   data-toggle="tab">
+                                    {% if elm.id is defined %}{{ elm.id }}
+                                    {% else %}# {{ idx }} {% endif %}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        {% for idx, elm in field.properties %}
+                            <div role="tabpanel"
+                                 class="tab-pane fade {% if loop.first %} in active {% endif %}"
+                                 id="tab_{{ field.id ~'_' ~ depth ~'_' ~ idx }}">
+                                {% if json_values is not null and json_values[key] is defined %}
+                                    {% set objet = json_values[key][idx] %}
+                                {% else %}
+                                    {% set objet = null %}
+                                {% endif %}
+                                {% set required = (elm.required is defined ? elm.required : null) %}
+                                {{ macros.json_form( elm.properties, required, objet, root  ~  '[' ~ key ~ ']' ~ '[' ~ idx ~ ']', depth - 1, key) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    </div>
+                {% else %}
+
+                        <div class="panel panel-primary row " role="tablist" id="accordion_{{ key }}"
+                             aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse_{{ key }}"
+                                           aria-expanded="true" aria-controls="collapseOne">
+                                            <h2>{{ key }}</h2>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapse_{{ key }}" class="panel-collapse collapse in" role="tabpanel"
+                                     aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        {% if json_values is not null and json_values[key] is defined %}
+                                            {% set objet = json_values[key] %}
+                                        {% else %}
+                                            {% set objet = null %}
+                                        {% endif %}
+                                        {% set required = (field.required is defined ? field.required : null) %}
+                                        {{ macros.json_form( field.properties, required, objet, root  ~  '[' ~ key ~ ']', depth - 1, key) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                {% endif %}
+                </div>
+            {% elseif field.type == "array" %}
+                <div class="col-md-12">
+                    <div class="box box-primary row">
+                        <div class="box-body clearfix {{ key }}-panel">
+                            <div class="box-heading"><h2>{{ key }} </h2></div>
+                            <div role="tabpanel">
+                                {# s'il ny as pas de valeur on génère un tableau vide#}
+                                {% if json_values is null or
+                                (json_values | length) == 0 or
+                                json_values[key] is not defined or
+
+                                (json_values[key] | length) == 0 %}
+                                    {% set required = (field.required is defined ? field.required : null) %}
+                                    {{ macros.json_form( [field.items], required, null, root  ~  '[' ~ key ~ ']', depth - 1, key) }}
+                                {% elseif json_values[key][0] is not iterable  or ((json_values[key] | length)  < 1) %}
+                                    {#si les valeurs sont simples, on les mets dans un champs de type tags #}
+                                    <input type="text"
+                                           class="form-control {{ parent }} {{ key }}"
+                                           id="field_{{ depth ~ '_' ~ key }}"
+                                           name="{{ root  ~  '[' ~ key  ~ ']' }}"
+                                           placeholder="{{ key }}" value="{{ json_values[key] | join(', ') }}"
+                                            {% if key in required %}  required="required" {% endif %}
+                                            />
+                                {% else %}
+                                    {# sinon on génère des onglets#}
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs" role="tablist">
+                                        {% for idx, elm in json_values[key] %}
+                                            <li role="presentation"
+                                                class="in {% if loop.first %} in active {% endif %}">
+                                                <a href="#tab_{{ key ~'_' ~idx }}" aria-controls="home" role="tab"
+                                                   data-toggle="tab">
+                                                    {% if elm.code is defined %}{{ elm.code }}
+                                                    {% elseif elm.lang is defined %} {{ elm.lang }}
+                                                    {% elseif elm.name is defined %} {{ elm.name }}
+                                                    {% elseif elm.title is defined %} {{ elm.title }}
+                                                    {% else %}# {{ idx }} {% endif %}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        {% for idx, elm in json_values[key] %}
+                                            <div role="tabpanel"
+                                                 class="tab-pane fade {% if loop.first %} in active {% endif %}"
+                                                 id="tab_{{ key ~'_' ~idx }}">
+                                                {% set required = (field.required is defined ? field.required : null) %}
+                                                {% set subSchema = {(idx): field.items} %}
+                                                {% set subValues = {(idx): elm} %}
+                                                {{ macros.json_form( subSchema, required, subValues, root  ~  '[' ~ key ~ ']', depth - 1, key) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endmacro %}

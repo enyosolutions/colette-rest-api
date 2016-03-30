@@ -1,0 +1,28 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/news
+    RewriteRule ^ index_prod.php [QSA,L]
+
+</IfModule>
+
+<IfModule mod_expires.c>
+
+# Enable expirations
+ExpiresActive On
+
+# Default directive
+#ExpiresDefault "access plus 1 week"
+#ExpiresByType image/gif "access plus 1 week"
+#ExpiresByType image/png "access plus 1 week"
+#ExpiresByType image/jpg "access plus 1 week"
+#ExpiresByType image/jpeg "access plus 1 week"
+#ExpiresByType application/javascript "access plus 1 hour"
+#ExpiresByType text/css "access plus 1 week"
+</IfModule>
+
+<IfModule mod_proxy.c>
+
+</IfModule>

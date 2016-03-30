@@ -1,0 +1,65 @@
+{% extends 'layout.html.twig' %}
+{% set active = 'page.contact' %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+        <link rel="stylesheet" href="/css/pages.css?v={{ app['assets.css.version'] }}"
+              xmlns="http://www.w3.org/1999/html">
+    <link rel="stylesheet" href="/css/search/destinations.css?v={{ app['assets.css.version'] }}"
+          xmlns="http://www.w3.org/1999/html">
+{% endblock %}
+
+
+{% block content %}
+<style>
+    .recent-item{
+        background-position: bottom;
+        background-attachment: local;
+        background-size:auto;
+    }
+</style>
+    <h1 class="page-title">{{ 'Les recherches récentes.'|trans }}</h1>
+
+    <article class="page-body cms-page">
+    {% for search in searches %}
+        {% if loop.index < 5 %}
+            <div id="page.code" class="page-body cms-page recent-item  bg-result-{{ search.query.from | lower }}">
+        {% else %}
+            <div id="page.code" class="page-body cms-page  recent-item scale-off  bg-result-{{ search.query.from | lower }} transition-delay-{{ (loop.index - 5)* 2 }}s">
+        {% endif %}
+        <a style="background-color:white;padding:5px;" href="/{{ app.locale }}/destinations/search/depart-de_{{ search.query.from }}/{{ search.query.startDate }}/{{ search.query.startDate }}/{{ search.query.passengers }}">
+            {{ 'from'| trans }} {{ search.query.from }} {{ 'leaving'| trans }}
+            : {{ search.query.startDate | format("d-m-y") }}, {{ 'returning'| trans }}: {{ search.query.startDate }}
+        </a>
+            </div>
+    {% endfor %}
+
+    </article>
+
+    {% endblock %}
+
+    {% block javascripts %}
+    {{ parent() }}
+    {% if app.debug %}
+        {#
+        <script src="/js/plugins/bootstrap-typeahead.js"></script>
+        <script src="/js/plugins//jquery.diagonalFade.min.js"></script>
+        #}
+        <script src="/js/xxx.js?v={{ app['assets.js.version'] }}"></script>
+    {% else %}
+        <script src="/js/xxx.min.js?v={{ app['assets.js.version'] }}"></script>
+
+    {% endif %}
+    {% if app.locale  != 'en' %}
+        <script src="/js/vendor/bootstrap-datepicker/locales/bootstrap-datepicker.{{ app.locale }}.js"></script>
+    {% endif %}
+    <script>
+        setTimeout(
+                function () {
+                    $('.scale-off').addClass('scale-on');
+                }, 1000
+        );
+    </script>
+{% endblock %}

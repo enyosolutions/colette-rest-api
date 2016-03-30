@@ -1,0 +1,34 @@
+{#
+Template for an email message sent to confirm an email address.
+Variables passed to this template:
+    user: The SimpleUser\User instance.
+    confirmationUrl: The link to click to complete the confirmation process.
+#}
+
+{# The subject line. #}
+{%- block subject -%}{%- autoescape false -%}
+Bienvenue dans la Communauté Kenweego !
+{%- endautoescape -%}{%- endblock -%}
+
+{# The plain text message. #}
+{%- block body_text -%}{%- autoescape false -%}
+
+Merci de rejoindre la communauté Kenweego. De belles aventures vous y attendent !
+
+    Pour continuer, merci de confirmer votre addresse e-mail, en cliquant sur le lien ci-dessous :
+{{ confirmationUrl }}
+
+{%- endautoescape -%}{%- endblock -%}
+
+{# The HTML message. Optional. #}
+{%- block body_html -%}
+
+    <h1>Bienvenue dans la Communauté Kenweego !</h1>
+
+    <p>
+        Merci de rejoindre la communauté Kenweego. De belles aventures vous y attendent0 !
+    <br>
+        Pour continuer, merci de confirmer votre addresse e-mail, en cliquant <a style="color:#ff484B;text-decoration: none;" href="{{ confirmationUrl }}">ici</a>.
+    </p>
+    <p style="">PS : Si vous n'activez pas votre compte, il sera désactivé au bout d'une semaine, et vous perdrez toutes vos alertes.</p>
+{%- endblock -%}
