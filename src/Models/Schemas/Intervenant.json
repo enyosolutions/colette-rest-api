@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/",
+    "type": "object",
+    "properties": {
+        "sex": {
+            "id": "sex",
+            "type": "string"
+        },
+        "picture": {
+            "id": "picture",
+            "type": "string"
+        },
+        "firstname": {
+            "id": "firstname",
+            "type": "string"
+        },
+        "age": {
+            "id": "age",
+            "type": "string"
+        },
+        "diploma": {
+            "id": "diploma",
+            "type": "string"
+        },
+        "skills": {
+            "id": "skills",
+            "type": "string"
+        },
+        "Bio": {
+            "id": "Bio",
+            "type": "string"
+        },
+        "friendshipScore": {
+            "id": "friendshipScore",
+            "type": "integer"
+        },
+        "skillsScore": {
+            "id": "skillsScore",
+            "type": "integer"
+        }
+    }
+}
