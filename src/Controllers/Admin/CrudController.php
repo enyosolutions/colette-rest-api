@@ -167,7 +167,7 @@ class CrudController extends DefaultController
             $singleItem = $this->request->get('_' . $collectionName);
             $singleItem['countries'] = explode(",", $singleItem['countries']);
             $this->app["mongodb"]->{$collectionName}->insert($singleItem);
-            return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list'));
+            return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]));
         } else {
             $schema = $this->app["jsonschema.store"]['/' . ucfirst($collectionName)];
             $schema = json_decode(json_encode($schema), true);
@@ -184,7 +184,6 @@ class CrudController extends DefaultController
         $this->session->getFlashbag()->add('success', "crud.messages.item.deleted.label");
         return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]));
     }
-
 
     public function dispatchAction()
     {
