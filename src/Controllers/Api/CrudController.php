@@ -17,7 +17,11 @@ class CrudController extends \App\Controllers\DefaultController
         $page = (int)($this->request->query->get('page') ?: 1);
         $limit = 30;
         $offset = ($page - 1) * $limit;
-        $query = $this->request->query->all();
+        $query = $this->request->query->get('query');
+        $sort = $this->request->query->has('sort') ? $this->request->query->get('sort') : [];
+        $object_list = $this->app["mongodb"]->{$collectionName}->find(
+        )->skip($offset)->limit($limit)->sort($sort);
+        $numResults = $object_list->count();
         $objects = $this->em->{$collectionName}->find($query)->skip($offset)->limit($limit)->sort(array('score'=>-1));
 
         foreach ($objects as $object) {

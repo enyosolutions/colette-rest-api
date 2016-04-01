@@ -28,25 +28,31 @@ class CrudController extends DefaultController
         $page = (int)($this->request->get('page') ?: 1);
         $offset = ($page - 1) * $limit;
         $object_list = null;
+        $sort = [];
         $q = null; //requête faire la recherche
+        $query = [];
+        if($this->request->query->has('sort')){
+            $sort = $this->request->query->get('sort');
+        }
 
         if ($this->request->query->has('q')) {
             $q = $this->request->query->get('q');
 
-            $object_list = $this->app["mongodb"]->{$collectionName}->find(['$or' => [
-                    ['code' => strtoupper($q)],
-                    ['name' => new \MongoRegex("/" . $q . "/i")],
-                    ['intl.en.name' => new \MongoRegex("/^" . $q . "/i")],
-                    ['intl.fr.name' => new \MongoRegex("/^" . $q . "/i")]
-                ]
-                ]
-            );
-        } else {
-            $object_list = $this->app["mongodb"]->{$collectionName}->find();
+            if(is_string($q)){
+            $query = ['$or' => [
+                ['code' => strtoupper($q)],
+                ['name' => new \MongoRegex("/" . $q . "/i")],
+                ['intl.en.name' => new \MongoRegex("/^" . $q . "/i")],
+                ['intl.fr.name' => new \MongoRegex("/^" . $q . "/i")]
+            ]
+            ];
+            }
+            else{
+                $query = $this->request->query->get('q');
+            }
         }
-
-        $object_list->skip($offset)->limit($limit);
-        $object_list->sort(array('name' => 1));
+        $object_list = $this->app["mongodb"]->{$collectionName}->find(
+        )->skip($offset)->limit($limit)->sort($sort);
         $numResults = $object_list->count();
 
         $paginator = new Paginator($numResults, $limit, $page, $this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]) . '?page=(:num)&limit=' . $limit . '&order_by=' . $order_by . '&order_dir=' . $order_dir
