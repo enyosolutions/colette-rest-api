@@ -31,6 +31,10 @@
             "id": "Bio",
             "type": "string"
         },
+        "address": {
+            "id": "address",
+            "type": "string"
+        },
         "friendshipScore": {
             "id": "friendshipScore",
             "type": "integer"

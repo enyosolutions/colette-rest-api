@@ -14,16 +14,19 @@
     <div>
 
         <h2>{{ singleItem ? 'Modifying : ' ~ singleItem.name : 'Creating' }}</h2>
+
         <form role="form" action="" method="post" class="box box-success">
             <div class="btn-group" style="">
-                <a href="{{ path('admin_crud_list', {'collectionName': collectionName} ) }}" class="btn btn-app" type="button"><i class="fa fa-reply"></i>Back</a>
-                <button class="btn btn-app" type="submit"><i class="fa fa-save"></i>{{ singleItem ? 'Modify' : 'Create' }}
+                <a href="{{ path('admin_crud_list', {'collectionName': collectionName} ) }}" class="btn btn-app"
+                   type="button"><i class="fa fa-reply"></i>Back</a>
+                <button class="btn btn-app" type="submit"><i
+                            class="fa fa-save"></i>{{ singleItem ? 'Modify' : 'Create' }}
                 </button>
 
             </div>
             <div class="box-body">
                 {% import 'json.schema.form.macro.html.twig' as macro %}
-                {{ macro.json_form(schema.properties, schema.required, singleItem,'_'~collectionName, 7) }}
+                {{ macro.json_form(schema.properties, schema.required, singleItem,'_' ~ collectionName, 7) }}
             </div>
 
             <!-- /.box-body -->
@@ -38,7 +41,7 @@
         </div>
 
     </div>
-
+    <hr/>
 
 {% endblock %}
 

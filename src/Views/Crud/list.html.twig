@@ -10,7 +10,7 @@
 
 {% block content %}
     <div>
-        <section>
+        <div>
             <div class="btn-group" style="">
                 <a class="btn btn-app" href="{{ path('admin_crud_list',{'collectionName': collectionName}) }}" type="button"><i
                         class="fa fa-reply"></i>Back</a>
@@ -41,8 +41,8 @@
                     <input type='submit' class="btn btn-primary" value='Change'>
                 </form>
             </div>
-        </section>
-
+        </div>
+        <hr/>
         <h1>
             {% if q is not empty %}
                 Results for "{{ q }}"
@@ -71,14 +71,14 @@
             {% for element in collection %}
                 <tr>
                     <td>{{ element._id }}</td>
-                    <td>{{ element.name }} | {{ element.title }} | {{ element.firstname }}</td>
+                    <td>{{ element.name }}  {{ element.title }}  {{ element.firstname }}</td>
                     <td>
                         <ul class="list-group">
                         {% for key, val in element %}
                             <li class="list-group-item">{{ key }} : {{ val |join('.') }}</li>
                         {% endfor %}
                             </ul>
-                </td>
+                    </td>
                     <td><a class="btn btn-primary" href="{{ path('admin_crud_edit', {'collectionName': collectionName, id: element._id }) }}">Edit</a> |
                     <a class="btn btn-primary bg-yellow"  href="{{ path('admin_crud_view', {'collectionName': collectionName, id: element._id }) }}">Show</a> |
                     <a class="btn btn-danger bg-yellow" onclick="return confirm('{{ 'confirm.action.label'| trans }}')"  href="{{ path('admin_crud_delete', {'collectionName': collectionName, id: element._id }) }}">Delete</a></td>
