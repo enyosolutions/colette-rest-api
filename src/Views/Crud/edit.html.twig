@@ -5,6 +5,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="/css/vendor/bootstrap-tagsinput/bootstrap-tagsinput.css">
 {% endblock %}
 
 
@@ -47,7 +48,7 @@
 
     {% block javascripts %}
         {{ parent() }}
-        <script src='/js/libs/wikipedia.js'></script>
+        <script src="/js/vendor/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
         <script type="text/javascript">
             var countries, countrynames;
 

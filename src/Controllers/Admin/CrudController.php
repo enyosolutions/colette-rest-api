@@ -40,7 +40,6 @@ class CrudController extends DefaultController
 
             if(is_string($q)){
             $query = ['$or' => [
-                ['code' => strtoupper($q)],
                 ['name' => new \MongoRegex("/" . $q . "/i")],
                 ['intl.en.name' => new \MongoRegex("/^" . $q . "/i")],
                 ['intl.fr.name' => new \MongoRegex("/^" . $q . "/i")]
@@ -87,8 +86,6 @@ class CrudController extends DefaultController
         if ($this->request->isMethod('POST')) {
             $data = $this->request->request->get('_' . $collectionName);
 
-            $data['code'] = slugify($data['code']);
-
             /**
              * unserialize comma separated values
              */
@@ -107,8 +104,6 @@ class CrudController extends DefaultController
             } else {
                 $singleItem = array_merge_recursive_ex($singleItem, $data);
             }
-
-            $singleItem['code'] = strtoupper($singleItem['code']);
 
             $singleItem = $this->app["jsonschema.validator"]->cast($singleItem, '/' . ucfirst($collectionName));
 
