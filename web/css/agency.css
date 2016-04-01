@@ -208,7 +208,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 header {
-    background-image: url(../img/jtr1b.jpg);
+    background-image: url(/img/colette.jpg);
     background-repeat: none;
     background-attachment: fixed;
     background-position: center center;
