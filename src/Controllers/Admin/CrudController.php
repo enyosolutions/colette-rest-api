@@ -89,6 +89,7 @@ class CrudController extends DefaultController
             /**
              * unserialize comma separated values
              */
+
             if (isset($data['tags'])) {
                 $data['tags'] = is_string($data['tags']) ? explode(",", $data['tags']) : $data['tags'];
             }
@@ -166,7 +167,7 @@ class CrudController extends DefaultController
     {
         if ($this->request->isMethod('POST')) {
             $singleItem = $this->request->get('_' . $collectionName);
-            $singleItem['countries'] = explode(",", $singleItem['countries']);
+            $singleItem = $this->app["jsonschema.validator"]->cast($singleItem, '/' . ucfirst($collectionName));
             $this->app["mongodb"]->{$collectionName}->insert($singleItem);
             return $this->app->redirect($this->app['url_generator']->generate('admin_crud_list', ['collectionName' => $collectionName]));
         } else {

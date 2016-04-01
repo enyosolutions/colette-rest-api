@@ -10,12 +10,8 @@
 
 
 {% block content %}
-
-
     <div>
-
         <h2>{{ singleItem ? 'Modifying : ' ~ singleItem.name : 'Creating' }}</h2>
-
         <form role="form" action="" method="post" class="box box-success">
             <div class="btn-group" style="">
                 <a href="{{ path('admin_crud_list', {'collectionName': collectionName} ) }}" class="btn btn-app"

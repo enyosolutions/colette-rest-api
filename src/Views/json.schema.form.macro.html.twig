@@ -12,7 +12,7 @@
                     {% endif %}
                     <input type="{% if field.type == 'boolean' %}checkbox{% else %}text {% endif %}"
                            class="form-control {{ parent }} {{ key }}"
-                           id="field_{{root ~ '_' ~ depth ~ '_' ~ key }}"
+                           id="field_{{ root ~ '_' ~ depth ~ '_' ~ key }}"
                            name="{{ root  ~  '[' ~ key  ~ ']' }}"
                            placeholder="{{ key }}" value="{{ objet }}"
                             {% if key in required %}  required="required" {% endif %}
@@ -31,7 +31,8 @@
                                     {% for idx, elm in field.properties %}
                                         <li role="presentation"
                                             class="in {% if loop.first %} in active {% endif %}">
-                                            <a href="#tab_{{ field.id ~'_' ~ depth ~'_' ~idx }}" aria-controls="home" role="tab"
+                                            <a href="#tab_{{ field.id ~'_' ~ depth ~'_' ~idx }}" aria-controls="home"
+                                               role="tab"
                                                data-toggle="tab">
                                                 {% if elm.id is defined %}{{ elm.id }}
                                                 {% else %}# {{ idx }} {% endif %}
@@ -93,23 +94,27 @@
                         <div class="box-body clearfix {{ key }}-panel">
                             <div class="box-heading"><h2>{{ key }} </h2></div>
                             <div role="tabpanel">
-                                {# s'il ny as pas de valeur on génère un tableau vide#}
-                                {% if json_values is null or
+
+                                {% if field.items.type == "string" %}
+                                    {#si les valeurs sont simples, on les mets dans un champs de type tags #}
+                                    <select multiple
+                                            class="form-control {{ parent }} {{ key }} tag-input"
+                                            id="field_{{ depth ~ '_' ~ key }}"
+                                            name="{{ root  ~  '[' ~ key  ~ ']' }}[]"
+                                            placeholder="{{ key }}"
+                                            {% if key in required %}  required="required" {% endif %}
+                                            >
+                                        {% for option in json_values[key] %}
+                                            <option value="{{ option }}" selected>{{ option }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {# s'il ny as pas de valeur on génère un tableau vide#}
+                                {% elseif json_values is null or
                                 (json_values | length) == 0 or
                                 json_values[key] is not defined or
-
                                 (json_values[key] | length) == 0 %}
                                     {% set required = (field.required is defined ? field.required : null) %}
                                     {{ macros.json_form( [field.items], required, null, root  ~  '[' ~ key ~ ']', depth - 1, key) }}
-                                {% elseif json_values[key][0] is not iterable  or ((json_values[key] | length)  < 1) %}
-                                    {#si les valeurs sont simples, on les mets dans un champs de type tags #}
-                                    <input type="text"
-                                           class="form-control {{ parent }} {{ key }} tag-input"
-                                           id="field_{{ depth ~ '_' ~ key }}"
-                                           name="{{ root  ~  '[' ~ key  ~ ']' }}"
-                                           placeholder="{{ key }}" value="{{ json_values[key] | join(', ') }}"
-                                            {% if key in required %}  required="required" {% endif %}
-                                            />
                                 {% else %}
                                     {# sinon on génère des onglets#}
                                     <!-- Nav tabs -->

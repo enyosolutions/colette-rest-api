@@ -58,7 +58,7 @@
                                 {% elseif json_values[key][0] is not iterable  or ((json_values[key] | length)  < 1)%}
                                     {#si les valeurs sont simples, on les mets dans un champs de type tags #}
                                     <input type="text"
-                                           class="form-control {{ parent }} {{ key }}"
+                                           class="form-control {{ parent }} {{ key }} tag-input"
                                            id="field_{{ depth ~ '_' ~ key }}"
                                            name="{{ root  ~  '[' ~ key  ~ ']' }}"
                                            placeholder="{{ key }}" value="{{ json_values[key] | join(', ') }}"
