@@ -25,7 +25,8 @@
         },
         "skills": {
             "id": "skills",
-            "type": "string"
+            "type": "array",
+            "items" : {"type" : "string"}
         },
         "Bio": {
             "id": "Bio",

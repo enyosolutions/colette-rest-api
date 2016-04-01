@@ -21,43 +21,43 @@
                 </div>
             {% elseif field.type == 'object' %}
                 <div class="col-md-offset-1 col-md-10 clearfix">
-                {% if field.id == 'intl' %}
-                    <div class="box box-primary row ">
-                    <div class="box-header"><h2>{{ key }}</h2></div>
-                    <div class="box-body clearfix {{ key }}-panel">
-                    {# Si le type est intl on génère des onglets#}
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        {% for idx, elm in field.properties %}
-                            <li role="presentation"
-                                class="in {% if loop.first %} in active {% endif %}">
-                                <a href="#tab_{{ field.id ~'_' ~ depth ~'_' ~idx }}" aria-controls="home" role="tab"
-                                   data-toggle="tab">
-                                    {% if elm.id is defined %}{{ elm.id }}
-                                    {% else %}# {{ idx }} {% endif %}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        {% for idx, elm in field.properties %}
-                            <div role="tabpanel"
-                                 class="tab-pane fade {% if loop.first %} in active {% endif %}"
-                                 id="tab_{{ field.id ~'_' ~ depth ~'_' ~ idx }}">
-                                {% if json_values is not null and json_values[key] is defined %}
-                                    {% set objet = json_values[key][idx] %}
-                                {% else %}
-                                    {% set objet = null %}
-                                {% endif %}
-                                {% set required = (elm.required is defined ? elm.required : null) %}
-                                {{ macros.json_form( elm.properties, required, objet, root  ~  '[' ~ key ~ ']' ~ '[' ~ idx ~ ']', depth - 1, key) }}
+                    {% if field.id == 'intl' %}
+                        <div class="box box-primary row ">
+                            <div class="box-header"><h2>{{ key }}</h2></div>
+                            <div class="box-body clearfix {{ key }}-panel">
+                                {# Si le type est intl on génère des onglets#}
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {% for idx, elm in field.properties %}
+                                        <li role="presentation"
+                                            class="in {% if loop.first %} in active {% endif %}">
+                                            <a href="#tab_{{ field.id ~'_' ~ depth ~'_' ~idx }}" aria-controls="home" role="tab"
+                                               data-toggle="tab">
+                                                {% if elm.id is defined %}{{ elm.id }}
+                                                {% else %}# {{ idx }} {% endif %}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    {% for idx, elm in field.properties %}
+                                        <div role="tabpanel"
+                                             class="tab-pane fade {% if loop.first %} in active {% endif %}"
+                                             id="tab_{{ field.id ~'_' ~ depth ~'_' ~ idx }}">
+                                            {% if json_values is not null and json_values[key] is defined %}
+                                                {% set objet = json_values[key][idx] %}
+                                            {% else %}
+                                                {% set objet = null %}
+                                            {% endif %}
+                                            {% set required = (elm.required is defined ? elm.required : null) %}
+                                            {{ macros.json_form( elm.properties, required, objet, root  ~  '[' ~ key ~ ']' ~ '[' ~ idx ~ ']', depth - 1, key) }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                    </div>
-                    </div>
-                {% else %}
+                        </div>
+                    {% else %}
 
                         <div class="panel panel-primary row " role="tablist" id="accordion_{{ key }}"
                              aria-multiselectable="true">
@@ -85,7 +85,7 @@
                             </div>
                         </div>
 
-                {% endif %}
+                    {% endif %}
                 </div>
             {% elseif field.type == "array" %}
                 <div class="col-md-12">
@@ -104,7 +104,7 @@
                                 {% elseif json_values[key][0] is not iterable  or ((json_values[key] | length)  < 1) %}
                                     {#si les valeurs sont simples, on les mets dans un champs de type tags #}
                                     <input type="text"
-                                           class="form-control {{ parent }} {{ key }}"
+                                           class="form-control {{ parent }} {{ key }} tag-input"
                                            id="field_{{ depth ~ '_' ~ key }}"
                                            name="{{ root  ~  '[' ~ key  ~ ']' }}"
                                            placeholder="{{ key }}" value="{{ json_values[key] | join(', ') }}"
