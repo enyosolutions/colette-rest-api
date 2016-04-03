@@ -117,7 +117,6 @@ class CrudController extends DefaultController
                     $this->app["mongodb"]->{$collectionName}->insert($singleItem);
                     $this->session->getFlashBag()->add('success', 'The collection has been modified');
                 }
-                $this->session->getFlashBag()->add('success', 'The collection has been modified');
                 return $this->app->redirect($this->app['url_generator']->generate('admin_crud_view', ['collectionName' => $collectionName, 'id' => $singleItem['_id']]));
             } else {
                 foreach ($this->app["jsonschema.validator"]->getErrors() as $error) {

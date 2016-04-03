@@ -12,13 +12,13 @@
     <div>
         <div>
             <div class="btn-group" style="">
-                <a class="btn btn-app" href="{{ path('admin_crud_list',{'collectionName': collectionName}) }}" type="button"><i
+                <a class="btn btn-danger" href="{{ path('admin_crud_list',{'collectionName': collectionName}) }}" type="button"><i
                         class="fa fa-reply"></i>Back</a>
 
             </div>
             <div class="btn-group" style="">
-                <a class="btn btn-app" href="{{ path('admin_crud_add', {'collectionName': collectionName}) }}" type="button"><i
-                        class="fa fa-plus"></i>Create a {{ collectionName }}</a>
+                <a class="btn btn-app btn-primary" href="{{ path('admin_crud_add', {'collectionName': collectionName}) }}" type="button"><i
+                        class="fa fa-plus"></i>Create a new {{ collectionName }}</a>
 
             </div>
             <div class="btn-group pull-right" style="margin-left: 10px">
@@ -47,14 +47,14 @@
             {% if q is not empty %}
                 Results for "{{ q }}"
             {% else %}
-                Listing {{ collection.count }} {{ collectionName }}
+                Listing {{ collection.count }} {{ collectionName }}(s)
             {% endif %}
         </h1>
 
         {% if paginator.totalItems == 1 %}
             <strong>1</strong> {{ collectionName }} found.
         {% else %}
-            <strong>{{ paginator.totalItems }}</strong> regions found.
+            <strong>{{ paginator.totalItems }}</strong> {{ collectionName }}s found.
         {% endif %}
 
         Showing <strong>{{ paginator.currentPageFirstItem }} - {{ paginator.currentPageLastItem }}</strong>.
@@ -75,7 +75,7 @@
                     <td>
                         <ul class="list-group">
                         {% for key, val in element %}
-                            <li class="list-group-item">{{ key }} : {{ val |join('.') }}</li>
+                            <li class="list-group-item">{{ key }} : {{ val is iterable ? (val | join( ' | ') ): (val |join('.')) }}</li>
                         {% endfor %}
                             </ul>
                     </td>
