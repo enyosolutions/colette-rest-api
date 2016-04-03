@@ -23,13 +23,17 @@
             "id": "diploma",
             "type": "string"
         },
+        "price": {
+            "id": "price",
+            "type": "integer"
+        },
         "skills": {
             "id": "skills",
             "type": "array",
             "items" : {"type" : "string"}
         },
-        "Bio": {
-            "id": "Bio",
+        "bio": {
+            "id": "bio",
             "type": "string"
         },
         "address": {
@@ -43,6 +47,21 @@
         "skillsScore": {
             "id": "skillsScore",
             "type": "integer"
+        },
+        "location": {
+            "id": "location",
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "id": "lat",
+                    "type": "number"
+                },
+                "lng": {
+                    "id": "lng",
+                    "type": "number"
+                }
+
+            }
         }
     }
 }

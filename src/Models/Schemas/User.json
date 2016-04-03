@@ -31,14 +31,6 @@
             "id": "token",
             "type": "string"
         },
-        "createdAt": {
-            "id": "createdAt",
-            "type": "number"
-        },
-        "lastModifiedAt": {
-            "id": "lastModifiedAt",
-            "type": "number"
-        },
         "roles": {
             "id": "roles",
             "type": "array",
@@ -49,7 +41,31 @@
                 "id": "0",
                 "type": "string"
             }
-        }
+        },
+        "location": {
+            "id": "location",
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "id": "lat",
+                    "type": "number"
+                },
+                "lng": {
+                    "id": "lng",
+                    "type": "number"
+                }
+
+            }
+        },
+        "createdAt": {
+            "id": "createdAt",
+            "type": "number"
+        },
+        "lastModifiedAt": {
+            "id": "lastModifiedAt",
+            "type": "number"
+        },
+
     },
     "required": [
         "firstname",
