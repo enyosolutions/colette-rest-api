@@ -75,7 +75,7 @@
                     <td>
                         <ul class="list-group">
                         {% for key, val in element %}
-                            <li class="list-group-item">{{ key }} : {{ val is iterable ? (val | join( ' | ') ): (val |join('.')) }}</li>
+                            <li class="list-group-item"><b>{{ key }} :</b> {{ val is iterable ? (val | join( ' | ') ): (val |join('.')) }}</li>
                         {% endfor %}
                             </ul>
                     </td>
