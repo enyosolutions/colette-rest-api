@@ -51,8 +51,12 @@ class CrudController extends \App\Controllers\DefaultController
 
         if (!$hasSchema) {
             $this->em->{$collectionName}->insert($data);
+            $data['_id'] .= "";
+            $response['body'] = $data;
         } elseif ($this->app["jsonschema.validator"]->validate($data, '/' . ucfirst($collectionName))) {
             $this->em->{$collectionName}->insert($data);
+            $data['_id'] .= "";
+            $response['body'] = $data;
         } else {
             $response['statusCode'] = 400;
             $response['status'] = "malformed.request";
@@ -87,6 +91,8 @@ class CrudController extends \App\Controllers\DefaultController
 
         if (!$hasSchema){
             $this->em->{$collectionName}->update(array('_id' => $objectId), $object);
+            $object['_id'] = (string)$object['_id'];
+            $response['body'] = $object;
         }
         else if ($this->app["jsonschema.validator"]->validate($object, '/' . ucfirst($collectionName))) {
             $this->em->{$collectionName}->update(array('_id' => $objectId), $object);

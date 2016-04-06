@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 loadClasses('controller',  DOCUMENT_ROOT . '/src/Controllers', $app);
 loadClasses('service',  DOCUMENT_ROOT . '/src/Services', $app);
-//loadServiceClasses( DOCUMENT_ROOT . '/lib/kwg/Services', $app);
+//loadServiceClasses( DOCUMENT_ROOT . '/lib/kwg/Serviccontres', $app);
 
 
 $app['mailchimp.service'] = $app->share(function () use ($app) {
