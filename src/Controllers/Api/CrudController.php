@@ -3,7 +3,6 @@
 namespace App\Controllers\Api;
 
 
-
 /**
  *
  *
@@ -20,10 +19,9 @@ class CrudController extends \App\Controllers\DefaultController
         $query = $this->request->query->has('query') ? $this->request->query->get('query') : [];
         $sort = $this->request->query->has('sort') ? $this->request->query->get('sort') : [];
 
-        $object_list = $this->app["mongodb"]->{$collectionName}->find(
-        )->skip($offset)->limit($limit)->sort($sort);
+        $object_list = $this->app["mongodb"]->{$collectionName}->find()->skip($offset)->limit($limit)->sort($sort);
         $numResults = $object_list->count();
-        $objects = $this->em->{$collectionName}->find($query)->skip($offset)->limit($limit)->sort(array('score'=>-1));
+        $objects = $this->em->{$collectionName}->find($query)->skip($offset)->limit($limit)->sort(array('score' => -1));
         foreach ($objects as $object) {
             $object['_id'] .= '';
             $response['body'][] = $object;
@@ -38,18 +36,23 @@ class CrudController extends \App\Controllers\DefaultController
     {
         $response = ['status' => 200, 'statusCode' => 200, 'errors' => [], 'body' => []];
 
+        $hasSchema = isset($this->app["jsonschema.store"]['/' . ucfirst($collectionName)]);
 
         //array containing a search query, complete with filters.
         $data = $this->request->request->all();
 
+        if ($hasSchema) {
 
-        $elementSkeleton = $this->app["jsonschema.validator"]->generate('/'.ucfirst($collectionName));
-        $element = array_merge_recursive_ex($elementSkeleton, $data);
-        $element['createdAt'] = time();
-        if ($this->app["jsonschema.validator"]->validate($element, '/'.ucfirst($collectionName))) {
 
-            $this->em->{$collectionName}->insert($element);
+            $elementSkeleton = $this->app["jsonschema.validator"]->generate('/' . ucfirst($collectionName));
+            $data = array_merge_recursive_ex($elementSkeleton, $data);
+        }
+        $data['createdAt'] = time();
 
+        if (!$hasSchema) {
+            $this->em->{$collectionName}->insert($data);
+        } elseif ($this->app["jsonschema.validator"]->validate($data, '/' . ucfirst($collectionName))) {
+            $this->em->{$collectionName}->insert($data);
         } else {
             $response['statusCode'] = 400;
             $response['status'] = "malformed.request";
@@ -68,20 +71,26 @@ class CrudController extends \App\Controllers\DefaultController
     public function editAction($collectionName, $id)
     {
         $response = ['status' => 200, 'statusCode' => 200, 'errors' => [], 'body' => []];
+        $hasSchema = isset($this->app["jsonschema.store"]['/' . ucfirst($collectionName)]);
+
         $objectId = new \MongoId($id);
         $object = $this->em->{$collectionName}->find(['_id' => $objectId])->getNext();
 
         //array containing a search query, complete with filters.
-        $skeleton = $this->app["jsonschema.validator"]->generate('/'.ucfirst($collectionName));
         $data = $this->request->request->all();
-        $data = array_merge_recursive_ex($skeleton, $data);
+        if ($hasSchema) {
+            $skeleton = $this->app["jsonschema.validator"]->generate('/' . ucfirst($collectionName));
+            $data = array_merge_recursive_ex($skeleton, $data);
+        }
         $object = array_merge_recursive_ex($object, $data);
-
         $element['lastModifiedAt'] = time();
 
-        if ($this->app["jsonschema.validator"]->validate($object, '/'.ucfirst($collectionName))) {
+        if (!$hasSchema){
             $this->em->{$collectionName}->update(array('_id' => $objectId), $object);
-            $object['_id']=(string)$object['_id'];
+        }
+        else if ($this->app["jsonschema.validator"]->validate($object, '/' . ucfirst($collectionName))) {
+            $this->em->{$collectionName}->update(array('_id' => $objectId), $object);
+            $object['_id'] = (string)$object['_id'];
             $response['body'] = $object;
         } else {
             $response['statusCode'] = 400;
