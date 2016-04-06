@@ -3,6 +3,10 @@
     "id": "/",
     "type": "object",
     "properties": {
+        "code": {
+            "id": "code",
+            "type": "string"
+        },
         "sex": {
             "id": "sex",
             "type": "string"

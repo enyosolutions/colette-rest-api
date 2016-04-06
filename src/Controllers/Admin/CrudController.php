@@ -126,10 +126,14 @@ class CrudController extends DefaultController
         }
         $schema = $this->app["jsonschema.store"]['/' . ucfirst($collectionName)];
         $schema = json_decode(json_encode($schema), true);
-        if ($singleItem !== NULL) {
-            $singleItem['countries'] = (isset($singleItem['countries']) ? implode(",", $singleItem['countries']) : []);
-            $singleItem['tags'] = (isset($singleItem['tags']) ? implode(",", $singleItem['tags']) : []);
+        if (isset($singleItem['countries']) && is_array(['countries'])) {
+            $singleItem['countries'] = implode(",", $singleItem['countries']);
         }
+        if (isset($singleItem['tags']) && is_array(['tags'])) {
+            $singleItem['tags'] = implode(",", $singleItem['tags']);
+        }
+
+
         return $this->app['twig']->render('Crud/edit.html.twig', array(
             'collectionName' => $collectionName,
             'singleItem' => $singleItem,
