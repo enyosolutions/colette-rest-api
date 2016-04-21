@@ -181,12 +181,13 @@ if ((isset($app['app.test']) && $app['app.test']) || ($app['debug'] && $app['pro
 
 //@todo This should be in the bootstrap ...
 try {
-    $conn = new MongoClient("mongodb://" . $app['mongodb.options']['user'] . ":"
-        . $app['mongodb.options']['password'] . "@"
-        . $app['mongodb.options']['host']
-        . "/" . $app['mongodb.options']['dbname']);
-    $db = $conn->selectDB($app['mongodb.options']['dbname']);
-    $app['mongodb'] = $db;
+    $app['mongodb'] = $app->share(function () use ($app) {
+        $conn = new MongoClient("mongodb://".$app['mongodb.options']['user'].":"
+            .$app['mongodb.options']['password']."@"
+            .$app['mongodb.options']['host']
+            ."/".$app['mongodb.options']['dbname']);
+        return $conn->selectDB($app['mongodb.options']['dbname']);
+    });
 } catch (MongoConnectionException $e) {
     die($e->getMessage()); // TODO:: In production you might want to turn this off.
 
