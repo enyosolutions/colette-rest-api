@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "/",
+    "type": "object",
+    "properties": {
+        "intervenant": {
+            "id": "intervenant",
+            "type": "string"
+        },
+        "beneficiaire": {
+            "id": "sex",
+            "type": "beneficiaire"
+        },
+        "texte": {
+            "id": "picture",
+            "type": "string"
+        },
+        "skillScore": {
+            "id": "skillScore",
+            "type": "string"
+        },
+        "humanScore": {
+            "id": "humanScore",
+            "type": "string"
+        },
+        "createdAt": {
+            "id": "createdAt",
+            "type": "string"
+        }
+    }
+}
