@@ -8,8 +8,8 @@
             "type": "string"
         },
         "beneficiaire": {
-            "id": "sex",
-            "type": "beneficiaire"
+            "id": "beneficiaire",
+            "type": "string"
         },
         "texte": {
             "id": "picture",
