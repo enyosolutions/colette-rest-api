@@ -11,8 +11,12 @@
             "id": "beneficiaire",
             "type": "string"
         },
-        "texte": {
-            "id": "picture",
+        "age": {
+            "id": "age",
+            "type": "string"
+        },
+        "text": {
+            "id": "text",
             "type": "string"
         },
         "skillScore": {
